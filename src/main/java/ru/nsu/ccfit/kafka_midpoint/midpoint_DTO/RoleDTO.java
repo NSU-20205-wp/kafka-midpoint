@@ -2,12 +2,10 @@ package ru.nsu.ccfit.kafka_midpoint.midpoint_DTO;
 
 import java.util.List;
 
-public class RoleDTO {
-    private String name;
+public class RoleDTO extends MidpointDTO{
     private String displayName;
     private String description;
     private List<AssignmentDTO> assignments;
-    private String oid;
 
     public String getOid() {
         return oid;
@@ -35,16 +33,6 @@ public class RoleDTO {
         this.displayName = displayName;
         this.description = description;
         this.assignments = assignments;
-    }
-
-    // геттеры и сеттеры для всех полей
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDisplayName() {
