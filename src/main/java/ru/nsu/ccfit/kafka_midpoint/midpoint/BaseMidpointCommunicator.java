@@ -14,7 +14,7 @@ public class BaseMidpointCommunicator {
     protected HttpURLConnection connection;
 
     public BaseMidpointCommunicator() {
-        baseUrl = "http://" + midpointConfiguration.getMidpointHost() + midpointConfiguration.getMidpointPort() +
+        baseUrl = "http://" + midpointConfiguration.getMidpointHost() + ":" + midpointConfiguration.getMidpointPort() +
                 "/midpoint/ws/rest";
     }
 
