@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 public class MidpointCreator extends BaseMidpointCommunicator {
 
     public MidpointCreator(String typeObject) throws IOException {
+        super();
         this.typeObject = typeObject;
         operationType = "POST";
         endpoint = baseUrl + '/' + typeObject + 's';

@@ -5,19 +5,25 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class BaseMidpointCommunicator {
-    protected final String baseUrl = "http://localhost:8080/midpoint/ws/rest";
-    private final String authorizationHeader = "Basic " + java.util.Base64.getEncoder()
-            .encodeToString(("administrator:5ecr3t").getBytes());
+
+    private final MidpointConfiguration midpointConfiguration = new MidpointConfiguration();
+    protected String baseUrl;
     protected String operationType;
     protected String endpoint;
     protected String typeObject;
     protected HttpURLConnection connection;
 
+    public BaseMidpointCommunicator() {
+        baseUrl = "http://" + midpointConfiguration.getMidpointHost() + midpointConfiguration.getMidpointPort() +
+                "/midpoint/ws/rest";
+    }
+
     void openConnection() throws IOException {
         URL url = new URL(endpoint);
         connection = (HttpURLConnection) url.openConnection();
 
-        String authorizationHeader = "Basic " + java.util.Base64.getEncoder().encodeToString(("administrator:5ecr3t").getBytes()); // Заголовок авторизации
+        String authorizationHeader = "Basic " + java.util.Base64.getEncoder().encodeToString(("administrator:5ecr3t")
+                .getBytes()); // Заголовок авторизации
         connection.setRequestProperty("Authorization", authorizationHeader);
         connection.setRequestMethod(operationType);
 
