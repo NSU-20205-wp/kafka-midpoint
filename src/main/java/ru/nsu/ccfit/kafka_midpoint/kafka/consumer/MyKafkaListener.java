@@ -32,7 +32,7 @@ public class MyKafkaListener {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-            }, service).thenAcceptAsync(s -> producer.send(s));
+            }, service).thenAcceptAsync(producer::send);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

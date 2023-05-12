@@ -7,6 +7,7 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.MidpointDTO;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
@@ -38,7 +39,10 @@ public class ProcessMessageTask implements Callable<String> {
                 int responseCode = creator.sendRequest(dto);
 
                 logger.info(() -> "Response code: " + responseCode);
-                return mapper.writeValueAsString(Map.entry("responseCode", responseCode));
+                HashMap<String, Object> res = new HashMap<>();
+                res.put("responseCode", responseCode);
+                res.put("requestId", params.get("requestId"));
+                return mapper.writeValueAsString(res);
             }
             else {
                 throw new RuntimeException("operation <" + operation + "> not supported");
