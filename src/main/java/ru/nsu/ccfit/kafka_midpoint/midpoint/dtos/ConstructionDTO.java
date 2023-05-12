@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.kafka_midpoint.midpoint_DTO;
+package ru.nsu.ccfit.kafka_midpoint.midpoint.dtos;
 
 public class ConstructionDTO {
     private String kind;
