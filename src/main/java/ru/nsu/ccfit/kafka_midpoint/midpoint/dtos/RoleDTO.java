@@ -2,7 +2,7 @@ package ru.nsu.ccfit.kafka_midpoint.midpoint.dtos;
 
 import java.util.List;
 
-public class RoleDTO extends MidpointDTO{
+public class RoleDTO extends MidpointDTO {
     private String displayName;
     private String description;
     private List<AssignmentDTO> assignments;

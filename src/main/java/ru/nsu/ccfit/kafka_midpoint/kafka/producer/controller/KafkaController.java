@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class KafkaController {
     private final TopicProducer topicProducer;
     @GetMapping(value = "/send")
-    public void send(){
+    public void send() {
         topicProducer.send("Hello, Kafka!");
     }
 }
