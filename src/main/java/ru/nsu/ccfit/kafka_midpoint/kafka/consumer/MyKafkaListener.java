@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.kafka_midpoint.kafka_consumer;
+package ru.nsu.ccfit.kafka_midpoint.kafka.consumer;
 
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;

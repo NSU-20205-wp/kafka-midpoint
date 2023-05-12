@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.kafka_midpoint.kafka_consumer;
+package ru.nsu.ccfit.kafka_midpoint.kafka.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
