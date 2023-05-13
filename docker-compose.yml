@@ -23,14 +23,14 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   postgresql-midpoint:
-    image: postgres:13-alpine
+    image: postgres:13
     container_name: book-postgresql-midpoint-chapter-2
     environment:
       - POSTGRES_PASSWORD_FILE=/run/secrets/mp_database_password.txt
       - POSTGRES_USER=midpoint
       - POSTGRES_INITDB_ARGS=--lc-collate=en_US.utf8 --lc-ctype=en_US.utf8
     ports:
-      - 19911:5432
+      - 15432:5432
     networks:
       - net
     secrets:
@@ -39,14 +39,14 @@ services:
       - pg-midpoint_data:/var/lib/postgresql/data
 
   postgresql-crm:
-    image: postgres:13-alpine
+    image: postgres:13
     container_name: book-postgresql-crm-chapter-2
     environment:
       - POSTGRES_PASSWORD=qwe123
       - POSTGRES_USER=crm
       - POSTGRES_INITDB_ARGS=--lc-collate=en_US.utf8 --lc-ctype=en_US.utf8
     ports:
-      - 15432:5432
+      - 25432:5432
     networks:
       - net
     volumes:
@@ -74,7 +74,7 @@ services:
     image: evolveum/midpoint:latest
     container_name: book-midpoint-chapter-2
     ports:
-      - 42673:8080
+      - 18080:8080
     environment:
       - MP_ENTRY_POINT=/opt/midpoint-dirs-docker-entrypoint
       - REPO_DATABASE_TYPE=postgresql
@@ -96,6 +96,7 @@ services:
       - ldap
       - postgresql-crm
       - postgresql-midpoint
+      #- zookeeper
 
 networks:
   net:
