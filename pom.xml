@@ -65,10 +65,17 @@
 	</dependencies>
 
 		<build>
+			<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+			<testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
 			<plugins>
 				<plugin>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.6</version>
 				</plugin>
 			</plugins>
 		</build>
