@@ -1,20 +1,32 @@
 package ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.factory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.MidpointDTO;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
 public class DTOFactory {
     private static final Logger factoryLogger = Logger.getLogger(DTOFactory.class.getCanonicalName());
-    private static final Map<String, Class<? extends MidpointDTO>> dtos = new HashMap<>();
+    private static DTOFactory instance;
 
-    private DTOFactory() {}
+    private final Map<String, Class<? extends MidpointDTO>> dtos = new HashMap<>();
 
-    public static void loadInstanceConfig(String configFileName) throws IOException {
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    private DTOFactory() { }
+
+    public static DTOFactory instance() {
+        if(instance == null) {
+            instance = new DTOFactory();
+        }
+        return instance;
+    }
+
+    public void load(String configFileName) throws IOException {
         try(DTOFactoryLoader parser = new DTOFactoryLoader(configFileName)) {
             Pair<String, Class<?>> pair;
             while(true) {
@@ -42,8 +54,11 @@ public class DTOFactory {
         }
     }
 
-    public static MidpointDTO newInstance(String dtoName) throws
-            NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        return dtos.get(dtoName).getConstructor().newInstance();
+    public MidpointDTO getDto(String dtoName, String params) throws
+            JsonProcessingException {
+        if(!dtos.containsKey(dtoName)) {
+            return null;
+        }
+        return mapper.readValue(params, dtos.get(dtoName));
     }
 }
