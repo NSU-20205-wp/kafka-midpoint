@@ -37,11 +37,11 @@ public class DTOFactoryLoader implements AutoCloseable {
         String[] split = line.toString().split("\\s");
         if(split.length < 2) {
             throw new DTOFactoryLoaderException(
-                    String.format("too few arguments for command: %s", split.length));
+                    String.format("too few arguments for DTO: %s", split.length));
         }
         if(split.length > 2) {
             throw new DTOFactoryLoaderException(
-                    String.format("too many arguments for command: %s", split.length));
+                    String.format("too many arguments for DTO: %s", split.length));
         }
         Class<?> metaclass = Class.forName(split[1]);
 
