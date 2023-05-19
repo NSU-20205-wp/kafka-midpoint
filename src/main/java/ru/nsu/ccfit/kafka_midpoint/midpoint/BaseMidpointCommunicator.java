@@ -18,7 +18,7 @@ public class BaseMidpointCommunicator {
                 "/midpoint/ws/rest";
     }
 
-    void openConnection() throws IOException {
+    protected void openConnection() throws IOException {
         URL url = new URL(endpoint);
         connection = (HttpURLConnection) url.openConnection();
 
