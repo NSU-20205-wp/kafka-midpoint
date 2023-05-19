@@ -4,7 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.BaseMidpointCommunicator;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.ModificationType;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.ItemDeltaDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.RoleDTO;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.TargetRefDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.UserDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.RoleSeacher;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.UserSearcher;
@@ -54,30 +57,19 @@ public class UserAssigner extends BaseMidpointCommunicator {
         connection.setRequestProperty("Content-Type", "application/json; utf-8");
     }
 
+    private String buildJsonForRole(String roleOid) throws JsonProcessingException {
 
-    public static String buildJsonForRole(String roleOid) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        ObjectNode rootNode = mapper.createObjectNode();
-
-        ObjectNode targetRefNode = mapper.createObjectNode();
-        targetRefNode.put("oid", roleOid);
-        targetRefNode.put("type", "RoleType");
-
-        ObjectNode valueNode = mapper.createObjectNode();
-        valueNode.set("targetRef", targetRefNode);
-
-        ObjectNode itemDeltaNode = mapper.createObjectNode();
-        itemDeltaNode.put("modificationType", "add");
-        itemDeltaNode.put("path", "assignment");
-        itemDeltaNode.set("value", valueNode);
-
+        TargetRefDTO targetRefDTO = new TargetRefDTO(roleOid, "RoleType");
+        ObjectNode targetRef = mapper.createObjectNode();
+        targetRef.set("targetRef", mapper.valueToTree(targetRefDTO));
+        ItemDeltaDTO itemDeltaDTO = new ItemDeltaDTO(ModificationType.ADD, "assignment", targetRef);
+        ObjectNode itemDeltaNode = mapper.valueToTree(itemDeltaDTO);
         ObjectNode objectModificationNode = mapper.createObjectNode();
         objectModificationNode.set("itemDelta", itemDeltaNode);
-
+        ObjectNode rootNode = mapper.createObjectNode();
         rootNode.set("objectModification", objectModificationNode);
-        
-        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootNode);
-
+        return mapper.writeValueAsString(rootNode);
     }
 
     public int assignRole(String roleName) throws Exception {
