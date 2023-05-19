@@ -7,9 +7,9 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.RoleDTO;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class RoleSeacher extends MidpointSearcher {
+public class RoleSearcher extends MidpointSearcher {
 
-    public RoleSeacher() throws IOException {
+    public RoleSearcher() throws IOException {
         super("role");
     }
 
