@@ -9,6 +9,7 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.ItemDeltaDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.RoleDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.TargetRefDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.UserDTO;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.RoleSeacher;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.UserSearcher;
 
@@ -21,26 +22,22 @@ public class UserAssigner extends BaseMidpointCommunicator {
     private UserDTO userDTO;
     private String userName;
 
-    private void findUser() throws Exception {
+    private void findUser() throws ObjectNotFoundException, IOException {
         UserSearcher userSearcher = new UserSearcher();
         userSearcher.sendSearchRequestForOneField("name", userName);
         ArrayList<UserDTO> listUsers = userSearcher.getListObjects();
-        if (listUsers.size() != 1) {
-            // не найден пользователь с таким именем
-            // что делать?
-            throw new Exception("user not found");
+        if (listUsers == null ) {
+            throw new ObjectNotFoundException("user with name '" + userName + "' not found");
         }
         userDTO = listUsers.get(0);
     }
 
-    private String findRoleOid(String roleName) throws Exception {
+    private String findRoleOid(String roleName) throws ObjectNotFoundException, IOException {
         RoleSeacher roleSeacher = new RoleSeacher();
         roleSeacher.sendSearchRequestForOneField("name", roleName);
         ArrayList<RoleDTO> listRoles = roleSeacher.getListObjects();
-        if (listRoles.size() != 1) {
-            // не найден пользователь с таким именем
-            // что делать?
-            throw new Exception("role not found");
+        if (listRoles == null) {
+            throw new ObjectNotFoundException("role with name '" + roleName + "' not found");
         }
         return listRoles.get(0).getOid();
     }
