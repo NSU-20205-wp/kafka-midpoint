@@ -1,0 +1,49 @@
+package ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.factory;
+
+import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.MidpointDTO;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
+
+public class DTOFactory {
+    private static final Logger factoryLogger = Logger.getLogger(DTOFactory.class.getCanonicalName());
+    private static final Map<String, Class<? extends MidpointDTO>> dtos = new HashMap<>();
+
+    private DTOFactory() {}
+
+    public static void loadInstanceConfig(String configFileName) throws IOException {
+        try(DTOFactoryLoader parser = new DTOFactoryLoader(configFileName)) {
+            Pair<String, Class<?>> pair;
+            while(true) {
+                try {
+                    pair = parser.nextEntry();
+                    if(pair == null) {
+                        break;
+                    }
+                    String name = pair.first;
+                    Class<?> metaclass = pair.second;
+                    if(!MidpointDTO.class.isAssignableFrom(metaclass)) {
+                        throw new ClassCastException(
+                                String.format("%s is not a subclass of %s", metaclass.getCanonicalName(),
+                                        MidpointDTO.class.getCanonicalName())
+                        );
+                    }
+                    dtos.put(name, (Class<? extends MidpointDTO>) metaclass);
+                }
+                catch(Exception e) {
+                    factoryLogger.severe(() ->
+                            String.format("%s: %s", e.getClass().getCanonicalName(), e.getMessage()));
+                }
+
+            }
+        }
+    }
+
+    public static MidpointDTO newInstance(String dtoName) throws
+            NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        return dtos.get(dtoName).getConstructor().newInstance();
+    }
+}
