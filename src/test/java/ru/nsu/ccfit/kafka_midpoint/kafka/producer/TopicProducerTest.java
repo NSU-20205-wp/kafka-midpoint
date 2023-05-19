@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
                 "listeners=PLAINTEXT://localhost:29102",
                 "port=29102",
         })
-@Import(value = KafkaTestConfig.class)
+@Import(value = TopicProducerTestConfig.class)
 class TopicProducerTest {
     private static final String TOPIC = "topic.midpointResponse";
 

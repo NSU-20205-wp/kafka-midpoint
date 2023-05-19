@@ -11,8 +11,8 @@ class EmbeddedKafkaBrokerTest {
     void testUpDown() {
         EmbeddedKafkaBroker kafkaBroker = new EmbeddedKafkaBroker(1);
         kafkaBroker.afterPropertiesSet();
-        assertThat(kafkaBroker.getZookeeperConnectionString().startsWith("127"));
+        assertThat(kafkaBroker.getZookeeperConnectionString()).startsWith("127");
         kafkaBroker.destroy();
-        assertThat(kafkaBroker.getZookeeperConnectionString() == null);
+        assertThat(kafkaBroker.getZookeeperConnectionString()).isNull();
     }
 }
