@@ -19,9 +19,10 @@ public class DTOFactory {
 
     private DTOFactory() { }
 
-    public static DTOFactory instance() {
+    public static DTOFactory instance() throws IOException {
         if(instance == null) {
             instance = new DTOFactory();
+            instance.load("dtos.conf");
         }
         return instance;
     }

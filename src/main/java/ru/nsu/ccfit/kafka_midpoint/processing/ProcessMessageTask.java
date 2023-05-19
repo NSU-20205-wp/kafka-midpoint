@@ -32,9 +32,7 @@ public class ProcessMessageTask implements Callable<String> {
         try {
             Map<String, Object> params = mapper.readValue(message, new TypeReference<>(){});
             String what = (String) params.get("what");
-            DTOFactory factory = DTOFactory.instance();
-            factory.load("dtos.conf");
-            MidpointDTO dto = factory.getDto(what, mapper.writeValueAsString(params.get("params")));
+            MidpointDTO dto = DTOFactory.instance().getDto(what, mapper.writeValueAsString(params.get("params")));
 
             String operation = (String) params.get("operation");
             logger.info(() -> "requested to perform " + operation + " on " + what);
