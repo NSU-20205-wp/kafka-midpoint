@@ -1,9 +1,11 @@
 package ru.nsu.ccfit.kafka_midpoint.processing;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointCreator;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.MidpointDTO;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.factory.DTOFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -30,7 +32,9 @@ public class ProcessMessageTask implements Callable<String> {
         try {
             Map<String, Object> params = mapper.readValue(message, new TypeReference<>(){});
             String what = (String) params.get("what");
-            MidpointDTO dto = DTOFactory.instance().getDto(what, mapper.writeValueAsString(params.get("params")));
+            DTOFactory factory = DTOFactory.instance();
+            factory.load("dtos.conf");
+            MidpointDTO dto = factory.getDto(what, mapper.writeValueAsString(params.get("params")));
 
             String operation = (String) params.get("operation");
             logger.info(() -> "requested to perform " + operation + " on " + what);
