@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.kafka_midpoint.kafka;
+package ru.nsu.ccfit.kafka_midpoint.kafka.listener;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -15,15 +15,15 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-//@EnableKafka
+
 @SpringBootTest(classes = MyKafkaListener.class)
 @EmbeddedKafka(
         partitions = 1,
         brokerProperties = {
-                "listeners=PLAINTEXT://localhost:29093",
-                "port=29093",
+                "listeners=PLAINTEXT://localhost:29101",
+                "port=29101",
         })
-@Import(value = KafkaTestConfig.class)
+@Import(value = KafkaListenerTestConfig.class)
 class MyKafkaListenerTest {
     private static final String TOPIC = "topic.midpointRequest";
 
@@ -41,7 +41,7 @@ class MyKafkaListenerTest {
 
         try {
             Thread.sleep(10000);
-            String message = "hello world";
+            String message = "hello for MyKafkaListener";
             producer.send(new ProducerRecord<>(TOPIC, message));
 
             String element = blockingQueue.poll(10, TimeUnit.SECONDS);
