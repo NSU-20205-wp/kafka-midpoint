@@ -2,6 +2,7 @@ package ru.nsu.ccfit.kafka_midpoint.midpoint;
 
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.UserDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.RoleSearcher;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.UserSearcher;
 
 import java.io.IOException;

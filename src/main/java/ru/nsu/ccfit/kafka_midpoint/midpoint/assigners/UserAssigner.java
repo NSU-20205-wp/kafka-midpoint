@@ -10,7 +10,7 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.RoleDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.TargetRefDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.UserDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.RoleSeacher;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.RoleSearcher;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.UserSearcher;
 
 import java.io.IOException;
@@ -33,9 +33,9 @@ public class UserAssigner extends BaseMidpointCommunicator {
     }
 
     private String findRoleOid(String roleName) throws ObjectNotFoundException, IOException {
-        RoleSeacher roleSeacher = new RoleSeacher();
-        roleSeacher.sendSearchRequestForOneField("name", roleName);
-        ArrayList<RoleDTO> listRoles = roleSeacher.getListObjects();
+        RoleSearcher roleSearcher = new RoleSearcher();
+        roleSearcher.sendSearchRequestForOneField("name", roleName);
+        ArrayList<RoleDTO> listRoles = roleSearcher.getListObjects();
         if (listRoles == null) {
             throw new ObjectNotFoundException("role with name '" + roleName + "' not found");
         }
