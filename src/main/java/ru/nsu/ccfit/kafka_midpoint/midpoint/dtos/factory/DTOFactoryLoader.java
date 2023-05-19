@@ -16,13 +16,16 @@ public class DTOFactoryLoader implements AutoCloseable {
     private StringBuilder nextLine() throws IOException {
         StringBuilder builder = new StringBuilder();
         int currentChar = resource.read();
-        if(currentChar < 0)
+        if(currentChar < 0) {
             return null;
+        }
         while(currentChar != '\n' && currentChar > 0) {
             builder.append((char) currentChar);
             currentChar = resource.read();
         }
-        builder.append((char) currentChar);
+        if(currentChar > 0) {
+            builder.append((char) currentChar);
+        }
         return builder;
     }
 
