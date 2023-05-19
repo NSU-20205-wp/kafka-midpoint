@@ -1,11 +1,10 @@
 package ru.nsu.ccfit.kafka_midpoint.processing;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointCreator;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.MidpointDTO;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.factory.DTOFactory;
+import ru.nsu.ccfit.kafka_midpoint.processing.factory.DTOFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;

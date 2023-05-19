@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.factory;
+package ru.nsu.ccfit.kafka_midpoint.processing.factory;
 
 public class DTOFactoryLoaderException extends Exception {
     public DTOFactoryLoaderException() {

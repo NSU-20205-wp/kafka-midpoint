@@ -1,10 +1,7 @@
-package ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.factory;
-
-import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.MidpointDTO;
+package ru.nsu.ccfit.kafka_midpoint.processing.factory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 public class DTOFactoryLoader implements AutoCloseable {
     private final InputStream resource;

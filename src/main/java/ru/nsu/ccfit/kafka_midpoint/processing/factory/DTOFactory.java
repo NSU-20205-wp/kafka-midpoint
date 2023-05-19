@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.factory;
+package ru.nsu.ccfit.kafka_midpoint.processing.factory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
