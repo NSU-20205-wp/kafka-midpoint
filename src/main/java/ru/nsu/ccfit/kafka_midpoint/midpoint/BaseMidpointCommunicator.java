@@ -3,6 +3,7 @@ package ru.nsu.ccfit.kafka_midpoint.midpoint;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class BaseMidpointCommunicator {
 
@@ -33,5 +34,13 @@ public class BaseMidpointCommunicator {
         connection.setInstanceFollowRedirects(false);
         connection.setConnectTimeout(200);
 
+    }
+
+    public int sendJsonRequest(String jsonRequest) throws IOException {
+
+        connection.connect();
+        byte[] jsonBytes = jsonRequest.getBytes(StandardCharsets.UTF_8);
+        connection.getOutputStream().write(jsonBytes);
+        return connection.getResponseCode();
     }
 }
