@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.kafka_midpoint.kafka.producer.controller;
+package ru.nsu.ccfit.kafka_midpoint.kafka.producer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

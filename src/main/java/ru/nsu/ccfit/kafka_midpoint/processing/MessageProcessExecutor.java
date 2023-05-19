@@ -2,9 +2,8 @@ package ru.nsu.ccfit.kafka_midpoint.processing;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.nsu.ccfit.kafka_midpoint.kafka.producer.controller.TopicProducer;
+import ru.nsu.ccfit.kafka_midpoint.kafka.producer.TopicProducer;
 
-import java.io.IOException;
 import java.util.concurrent.*;
 import java.util.logging.Logger;
 
@@ -22,7 +21,7 @@ public class MessageProcessExecutor {
         this.producer = producer;
     }
 
-    public void setBlockingQueue(BlockingQueue<String> blockingQueue) throws IOException {
+    public void setBlockingQueue(BlockingQueue<String> blockingQueue) {
         logger.info(() -> "initialization of objectInputStream");
         this.blockingQueue = blockingQueue;
         start();

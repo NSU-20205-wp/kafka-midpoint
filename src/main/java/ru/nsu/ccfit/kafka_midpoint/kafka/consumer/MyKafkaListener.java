@@ -19,6 +19,9 @@ public class MyKafkaListener {
     public void setBlockingQueue(BlockingQueue<String> blockingQueue) {
         logger.info(() -> "initialization of blockingQueue");
         this.blockingQueue = blockingQueue;
+        if (blockingQueue == null) {
+            throw new IllegalStateException("blockingQueue must not be null");
+        }
     }
 
     @KafkaHandler(isDefault = true)
