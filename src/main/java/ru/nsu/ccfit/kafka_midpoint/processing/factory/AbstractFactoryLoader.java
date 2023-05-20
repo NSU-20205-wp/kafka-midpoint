@@ -31,7 +31,7 @@ public class AbstractFactoryLoader implements AutoCloseable {
         return builder.toString();
     }
 
-    public Map<String, String> readConfig() throws IOException {
+    public Map<String, String> load() throws IOException {
         Map<String, String> factoryFiles = new HashMap<>();
         int lineNumber = 1;
         for(String line = readLine(); line != null; lineNumber++, line = readLine()) {
