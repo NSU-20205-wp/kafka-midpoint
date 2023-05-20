@@ -1,17 +1,15 @@
-package ru.nsu.ccfit.kafka_midpoint;
-
-import ru.nsu.ccfit.kafka_midpoint.midpoint.BaseMidpointCommunicator;
+package ru.nsu.ccfit.kafka_midpoint.midpoint;
 
 import java.io.IOException;
 import java.util.logging.Logger;
 
-public class MidpointDeliter extends BaseMidpointCommunicator {
+public class MidpointDeleter extends BaseMidpointCommunicator {
 
-    private static final Logger logger = Logger.getLogger(MidpointDeliter.class.getName());
+    private static final Logger logger = Logger.getLogger(MidpointDeleter.class.getName());
 
     int responseCode;
 
-    public MidpointDeliter(String typeObject, String oid) throws IOException {
+    public MidpointDeleter(String typeObject, String oid) throws IOException {
         super();
         this.typeObject = typeObject;
         operationType = "DELETE";
