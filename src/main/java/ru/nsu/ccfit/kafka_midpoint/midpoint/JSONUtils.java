@@ -16,7 +16,6 @@ public class JSONUtils {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode rootNode = mapper.createObjectNode();
         rootNode.set(key, mapper.readTree(value));
-        System.out.println(mapper.writeValueAsString(rootNode));
         return mapper.writeValueAsString(rootNode);
 
     }

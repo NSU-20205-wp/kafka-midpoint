@@ -28,7 +28,6 @@ public class OidFinder {
         if (listRoles == null ) {
             throw new ObjectNotFoundException("role with " +field + " '" + value + "' not found");
         }
-        System.out.println(listRoles.get(0).getOid());
         return listRoles.get(0).getOid();
     }
 }
