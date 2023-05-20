@@ -4,8 +4,10 @@ import ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.ProductCreator;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class Factory {
+    private static final Logger logger = Logger.getLogger(Factory.class.getCanonicalName());
     private final Class<?> basicClass;
     private final Map<String, Class<?>> producers = new HashMap<>();
     private final ProductCreator creator;
@@ -15,7 +17,8 @@ public class Factory {
         this.creator = creator;
         for(Map.Entry<String, Class<?>> entry: producers.entrySet()) {
             if(!basicClass.isAssignableFrom(entry.getValue())) {
-                //todo add to log a class cast error
+                logger.severe(() -> String.format("'%s' is not a subclass of '%s'",
+                        entry.getValue(), basicClass.getCanonicalName()));
             }
             else {
                 this.producers.put(entry.getKey(), entry.getValue());
