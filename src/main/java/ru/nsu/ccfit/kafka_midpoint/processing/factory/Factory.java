@@ -1,6 +1,7 @@
 package ru.nsu.ccfit.kafka_midpoint.processing.factory;
 
 import ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.ProductCreator;
+import ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.ProductCreatorException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class Factory {
         }
     }
 
-    public Object createProduct(String name, String[] args) throws Exception {
+    public Object createProduct(String name, String[] args) throws ProductCreatorException {
         return creator.createProduct(producers, name, args);
     }
 }

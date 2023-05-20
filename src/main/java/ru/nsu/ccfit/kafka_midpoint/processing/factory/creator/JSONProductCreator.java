@@ -8,11 +8,16 @@ import java.util.Map;
 public class JSONProductCreator implements ProductCreator {
     @Override
     public Object createProduct(Map<String, Class<?>> productList, String productName,
-                                String[] args) throws JsonProcessingException {
+                                String[] args) throws ProductCreatorException {
         if(!productList.containsKey(productName)) {
             return null;
         }
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(args[0], productList.get(productName));
+        try {
+            return mapper.readValue(args[0], productList.get(productName));
+        }
+        catch(JsonProcessingException e) {
+            throw new ProductCreatorException(e);
+        }
     }
 }

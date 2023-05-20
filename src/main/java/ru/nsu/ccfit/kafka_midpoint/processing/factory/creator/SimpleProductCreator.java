@@ -8,10 +8,15 @@ import java.util.Map;
 public class SimpleProductCreator implements ProductCreator {
     @Override
     public Object createProduct(Map<String, Class<?>> productList, String productName, String[] args)
-            throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+            throws ProductCreatorException {
         if (!productList.containsKey(productName)) {
             return null;
         }
-        return productList.get(productName).getDeclaredConstructor().newInstance();
+        try {
+            return productList.get(productName).getDeclaredConstructor().newInstance();
+        }
+        catch(NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new ProductCreatorException(e);
+        }
     }
 }
