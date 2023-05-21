@@ -1,6 +1,5 @@
 package ru.nsu.ccfit.kafka_midpoint.midpoint.assigners;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.ModificationType;
@@ -36,17 +35,23 @@ public class UserAssigner {
         return modifier.mutateField("assignment", builtValueForRole(roleName), ModificationType.DELETE);
     }
 
-        String roleOid = findRoleOid(roleName);
-        return sendRequest(buildJsonForRole(roleOid));
+    private ObjectNode builtValueForResource(String resourceName) throws ObjectNotFoundException, IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode root = objectMapper.createObjectNode();
+        ObjectNode constructionNode = objectMapper.createObjectNode();
+        ObjectNode resourceRefNode = objectMapper.createObjectNode();
+        resourceRefNode.put("oid", OidFinder.findResourceOid("name", resourceName));
+        constructionNode.set("resourceRef", resourceRefNode);
+        root.set("construction", constructionNode);
+        return root;
     }
 
+    public int assignResource(String resourceName) throws ObjectNotFoundException, IOException {
+        return modifier.mutateField("assignment", builtValueForResource(resourceName), ModificationType.ADD);
+    }
 
-    public int sendRequest(String jsonRequest) throws IOException {
-
-        connection.connect();
-        byte[] jsonBytes = jsonRequest.getBytes(StandardCharsets.UTF_8);
-        connection.getOutputStream().write(jsonBytes);
-        return connection.getResponseCode();
+    public int revokeResource(String resourceName) throws ObjectNotFoundException, IOException {
+        return modifier.mutateField("assignment", builtValueForResource(resourceName), ModificationType.DELETE);
     }
 
 
