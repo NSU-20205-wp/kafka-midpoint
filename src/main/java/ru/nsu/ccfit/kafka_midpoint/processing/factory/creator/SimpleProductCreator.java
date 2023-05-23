@@ -1,13 +1,13 @@
 package ru.nsu.ccfit.kafka_midpoint.processing.factory.creator;
 
-import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointCreator;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class SimpleProductCreator implements ProductCreator {
+    private Map<String, Class<?>> productList;
+
     @Override
-    public Object createProduct(Map<String, Class<?>> productList, String productName, String[] args)
+    public Object createProduct(String productName, String[] args)
             throws ProductCreatorException {
         if (!productList.containsKey(productName)) {
             return null;
@@ -18,5 +18,10 @@ public class SimpleProductCreator implements ProductCreator {
         catch(NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new ProductCreatorException(e);
         }
+    }
+
+    @Override
+    public void setProductList(Map<String, Class<?>> productList) {
+        this.productList = productList;
     }
 }

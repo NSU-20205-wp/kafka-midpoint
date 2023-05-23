@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 
 public class JSONProductCreator implements ProductCreator {
+    private Map<String, Class<?>> productList;
+
     @Override
-    public Object createProduct(Map<String, Class<?>> productList, String productName,
+    public Object createProduct(String productName,
                                 String[] args) throws ProductCreatorException {
         if(!productList.containsKey(productName)) {
             return null;
@@ -19,5 +21,10 @@ public class JSONProductCreator implements ProductCreator {
         catch(JsonProcessingException e) {
             throw new ProductCreatorException(e);
         }
+    }
+
+    @Override
+    public void setProductList(Map<String, Class<?>> productList) {
+        this.productList = productList;
     }
 }
