@@ -32,7 +32,7 @@ public class MidpointModifier extends BaseMidpointCommunicator {
         return sendJsonRequest(jsonRequest);
     }
 
-    public int mutateField(String nameField, Object newValue, ModificationType modificationType) throws IOException {
+    public int updateField(String nameField, Object newValue, ModificationType modificationType) throws IOException {
         // add delete replace
         ItemDeltaDTO itemDeltaDTO = new ItemDeltaDTO(modificationType, nameField, newValue);
         ObjectMapper mapper = new ObjectMapper();

@@ -5,7 +5,7 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointSearcher;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.ResourceDTO;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 public class ResourceSearcher extends MidpointSearcher {
 
@@ -13,7 +13,7 @@ public class ResourceSearcher extends MidpointSearcher {
         super("resource");
     }
 
-    public ArrayList<ResourceDTO> getListObjects() {
+    public List<ResourceDTO> getListObjects() {
         return super.getListObjects(new TypeReference<>() {
         });
     }

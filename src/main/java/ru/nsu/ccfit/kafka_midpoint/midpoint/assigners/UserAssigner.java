@@ -19,7 +19,7 @@ public class UserAssigner {
 
     }
 
-    private ObjectNode builtValueForRole(String roleName) throws ObjectNotFoundException, IOException {
+    private ObjectNode buildValueForRole(String roleName) throws ObjectNotFoundException, IOException {
         TargetRefDTO targetRefDTO = new TargetRefDTO(OidFinder.findRoleOid("name", roleName), "RoleType");
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode targetRef = mapper.createObjectNode();
@@ -28,14 +28,14 @@ public class UserAssigner {
     }
 
     public int assingRole(String roleName) throws ObjectNotFoundException, IOException {
-        return modifier.mutateField("assignment", builtValueForRole(roleName), ModificationType.ADD);
+        return modifier.updateField("assignment", buildValueForRole(roleName), ModificationType.ADD);
     }
 
     public int revokeRole(String roleName) throws ObjectNotFoundException, IOException {
-        return modifier.mutateField("assignment", builtValueForRole(roleName), ModificationType.DELETE);
+        return modifier.updateField("assignment", buildValueForRole(roleName), ModificationType.DELETE);
     }
 
-    private ObjectNode builtValueForResource(String resourceName) throws ObjectNotFoundException, IOException {
+    private ObjectNode buildValueForResource(String resourceName) throws ObjectNotFoundException, IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode root = objectMapper.createObjectNode();
         ObjectNode constructionNode = objectMapper.createObjectNode();
@@ -47,11 +47,11 @@ public class UserAssigner {
     }
 
     public int assignResource(String resourceName) throws ObjectNotFoundException, IOException {
-        return modifier.mutateField("assignment", builtValueForResource(resourceName), ModificationType.ADD);
+        return modifier.updateField("assignment", buildValueForResource(resourceName), ModificationType.ADD);
     }
 
     public int revokeResource(String resourceName) throws ObjectNotFoundException, IOException {
-        return modifier.mutateField("assignment", builtValueForResource(resourceName), ModificationType.DELETE);
+        return modifier.updateField("assignment", buildValueForResource(resourceName), ModificationType.DELETE);
     }
 
 

@@ -12,6 +12,7 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.UserSearcher;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class OidFinder {
 
@@ -37,7 +38,7 @@ public class OidFinder {
     public static String findConnectorOid(String field, String value) throws ObjectNotFoundException, IOException {
         ConnectorSearcher connectorSearcher = new ConnectorSearcher();
         connectorSearcher.sendSearchRequestForOneField(field, value);
-        ArrayList<ConnectorDTO> listConnectors = connectorSearcher.getListObjects();
+        List<ConnectorDTO> listConnectors = connectorSearcher.getListObjects();
         if (listConnectors == null ) {
             throw new ObjectNotFoundException("connector with " +field + " '" + value + "' not found");
         }
@@ -47,7 +48,7 @@ public class OidFinder {
     public static String findResourceOid(String field, String value) throws ObjectNotFoundException, IOException {
         ResourceSearcher resourceSearcher = new ResourceSearcher();
         resourceSearcher.sendSearchRequestForOneField(field, value);
-        ArrayList<ResourceDTO> listResources = resourceSearcher.getListObjects();
+        List<ResourceDTO> listResources = resourceSearcher.getListObjects();
         if (listResources == null ) {
             throw new ObjectNotFoundException("resource with " +field + " '" + value + "' not found");
         }

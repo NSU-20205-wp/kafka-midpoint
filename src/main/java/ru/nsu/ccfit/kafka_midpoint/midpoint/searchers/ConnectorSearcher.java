@@ -5,7 +5,7 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointSearcher;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.ConnectorDTO;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 public class ConnectorSearcher extends MidpointSearcher {
 
@@ -13,7 +13,7 @@ public class ConnectorSearcher extends MidpointSearcher {
         super("connector");
     }
 
-    public ArrayList<ConnectorDTO> getListObjects() {
+    public List<ConnectorDTO> getListObjects() {
         return super.getListObjects(new TypeReference<>() {
         });
     }
