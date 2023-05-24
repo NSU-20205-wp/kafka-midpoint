@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class MidpointSearcher extends BaseMidpointCommunicator {
@@ -49,7 +50,7 @@ public class MidpointSearcher extends BaseMidpointCommunicator {
         in.close();
     }
 
-    public <T> ArrayList<T> getListObjects(TypeReference<ArrayList<T>> targetClass)  {
+    public <T> List<T> getListObjects(TypeReference<ArrayList<T>> targetClass)  {
 
         // Обработка полученных данных
         jsonResponse = stringResponse.toString();

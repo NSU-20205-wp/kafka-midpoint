@@ -19,7 +19,7 @@ public class OidFinder {
     public static String findUserOid(String field, String value) throws ObjectNotFoundException, IOException {
         UserSearcher userSearcher = new UserSearcher();
         userSearcher.sendSearchRequestForOneField(field, value);
-        ArrayList<UserDTO> listUsers = userSearcher.getListObjects();
+        ArrayList<UserDTO> listUsers = new ArrayList<>(userSearcher.getListObjects());
         if (listUsers == null ) {
             throw new ObjectNotFoundException("user with " +field + " '" + value + "' not found");
         }
@@ -29,7 +29,7 @@ public class OidFinder {
     public static String findRoleOid(String field, String value) throws ObjectNotFoundException, IOException {
         RoleSearcher roleSearcher = new RoleSearcher();
         roleSearcher.sendSearchRequestForOneField(field, value);
-        ArrayList<RoleDTO> listRoles = roleSearcher.getListObjects();
+        ArrayList<RoleDTO> listRoles = new ArrayList<>(roleSearcher.getListObjects());
         if (listRoles == null ) {
             throw new ObjectNotFoundException("role with " +field + " '" + value + "' not found");
         }

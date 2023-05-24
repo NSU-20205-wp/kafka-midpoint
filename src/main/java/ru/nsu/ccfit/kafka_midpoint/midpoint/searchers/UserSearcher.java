@@ -6,6 +6,7 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.UserDTO;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserSearcher extends MidpointSearcher {
 
@@ -13,7 +14,7 @@ public class UserSearcher extends MidpointSearcher {
         super("user");
     }
 
-    public ArrayList<UserDTO> getListObjects() {
+    public List<UserDTO> getListObjects() {
         return super.getListObjects(new TypeReference<>() {
         });
     }
