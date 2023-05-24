@@ -1,0 +1,5 @@
+ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.SimpleProductCreator
+ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointDeleter
+resource ru.nsu.ccfit.kafka_midpoint.midpoint.deleters.ResourceDeleter
+user ru.nsu.ccfit.kafka_midpoint.midpoint.deleters.UserDeleter
+role ru.nsu.ccfit.kafka_midpoint.midpoint.deleters.RoleDeleter
