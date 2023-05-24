@@ -24,10 +24,19 @@ public class MidpointModifier extends BaseMidpointCommunicator {
     }
 
     public int modifyField(String nameField, Object newValue) throws IOException {
+        // ЗАМЕНА сторого значения на новое
         ItemDeltaDTO itemDeltaDTO = new ItemDeltaDTO(ModificationType.REPLACE, nameField, newValue);
         ObjectMapper mapper = new ObjectMapper();
         String jsonRequest = JSONUtils.wrapper("objectModification",
                 JSONUtils.wrapper("itemDelta", mapper.writeValueAsString(mapper.valueToTree(itemDeltaDTO))));
         return sendJsonRequest(jsonRequest);
     }
-}
+
+    public int updateField(String nameField, Object newValue, ModificationType modificationType) throws IOException {
+        // add delete replace
+        ItemDeltaDTO itemDeltaDTO = new ItemDeltaDTO(modificationType, nameField, newValue);
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonRequest = JSONUtils.wrapper("objectModification",
+                JSONUtils.wrapper("itemDelta", mapper.writeValueAsString(mapper.valueToTree(itemDeltaDTO))));
+        return sendJsonRequest(jsonRequest);
+    }}

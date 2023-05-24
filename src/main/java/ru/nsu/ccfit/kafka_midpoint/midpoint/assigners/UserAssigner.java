@@ -1,87 +1,57 @@
 package ru.nsu.ccfit.kafka_midpoint.midpoint.assigners;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.BaseMidpointCommunicator;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.ModificationType;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.ItemDeltaDTO;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.RoleDTO;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.OidFinder;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.TargetRefDTO;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.UserDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.RoleSearcher;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.UserSearcher;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.modifiers.UserModifier;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 
-public class UserAssigner extends BaseMidpointCommunicator {
+public class UserAssigner {
 
-    private UserDTO userDTO;
-    private String userName;
+    UserModifier modifier;
 
-    private void findUser() throws ObjectNotFoundException, IOException {
-        UserSearcher userSearcher = new UserSearcher();
-        userSearcher.sendSearchRequestForOneField("name", userName);
-        ArrayList<UserDTO> listUsers = userSearcher.getListObjects();
-        if (listUsers == null ) {
-            throw new ObjectNotFoundException("user with name '" + userName + "' not found");
-        }
-        userDTO = listUsers.get(0);
+    public UserAssigner(String nameUser) throws ObjectNotFoundException, IOException {
+        modifier = new UserModifier(nameUser);
+
     }
 
-    private String findRoleOid(String roleName) throws ObjectNotFoundException, IOException {
-        RoleSearcher roleSearcher = new RoleSearcher();
-        roleSearcher.sendSearchRequestForOneField("name", roleName);
-        ArrayList<RoleDTO> listRoles = roleSearcher.getListObjects();
-        if (listRoles == null) {
-            throw new ObjectNotFoundException("role with name '" + roleName + "' not found");
-        }
-        return listRoles.get(0).getOid();
-    }
-
-
-    public UserAssigner(String userName) throws Exception {
-        super();
-        this.userName = userName;
-        findUser();
-        this.typeObject = "user";
-        operationType = "POST";
-        endpoint = baseUrl + '/' + typeObject + "s/" + userDTO.getOid();
-        openConnection();
-        connection.setRequestProperty("Content-Type", "application/json; utf-8");
-    }
-
-    private String buildJsonForRole(String roleOid) throws JsonProcessingException {
-
+    private ObjectNode buildValueForRole(String roleName) throws ObjectNotFoundException, IOException {
+        TargetRefDTO targetRefDTO = new TargetRefDTO(OidFinder.findRoleOid("name", roleName), "RoleType");
         ObjectMapper mapper = new ObjectMapper();
-        TargetRefDTO targetRefDTO = new TargetRefDTO(roleOid, "RoleType");
         ObjectNode targetRef = mapper.createObjectNode();
         targetRef.set("targetRef", mapper.valueToTree(targetRefDTO));
-        ItemDeltaDTO itemDeltaDTO = new ItemDeltaDTO(ModificationType.ADD, "assignment", targetRef);
-        ObjectNode itemDeltaNode = mapper.valueToTree(itemDeltaDTO);
-        ObjectNode objectModificationNode = mapper.createObjectNode();
-        objectModificationNode.set("itemDelta", itemDeltaNode);
-        ObjectNode rootNode = mapper.createObjectNode();
-        rootNode.set("objectModification", objectModificationNode);
-        return mapper.writeValueAsString(rootNode);
+        return targetRef;
     }
 
-    public int assignRole(String roleName) throws Exception {
-
-        String roleOid = findRoleOid(roleName);
-        return sendRequest(buildJsonForRole(roleOid));
+    public int assingRole(String roleName) throws ObjectNotFoundException, IOException {
+        return modifier.updateField("assignment", buildValueForRole(roleName), ModificationType.ADD);
     }
 
+    public int revokeRole(String roleName) throws ObjectNotFoundException, IOException {
+        return modifier.updateField("assignment", buildValueForRole(roleName), ModificationType.DELETE);
+    }
 
-    public int sendRequest(String jsonRequest) throws IOException {
+    private ObjectNode buildValueForResource(String resourceName) throws ObjectNotFoundException, IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode root = objectMapper.createObjectNode();
+        ObjectNode constructionNode = objectMapper.createObjectNode();
+        ObjectNode resourceRefNode = objectMapper.createObjectNode();
+        resourceRefNode.put("oid", OidFinder.findResourceOid("name", resourceName));
+        constructionNode.set("resourceRef", resourceRefNode);
+        root.set("construction", constructionNode);
+        return root;
+    }
 
-        connection.connect();
-        byte[] jsonBytes = jsonRequest.getBytes(StandardCharsets.UTF_8);
-        connection.getOutputStream().write(jsonBytes);
-        return connection.getResponseCode();
+    public int assignResource(String resourceName) throws ObjectNotFoundException, IOException {
+        return modifier.updateField("assignment", buildValueForResource(resourceName), ModificationType.ADD);
+    }
+
+    public int revokeResource(String resourceName) throws ObjectNotFoundException, IOException {
+        return modifier.updateField("assignment", buildValueForResource(resourceName), ModificationType.DELETE);
     }
 
 
