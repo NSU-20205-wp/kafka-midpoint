@@ -11,13 +11,24 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.UserSearcher;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+
 class UserCreatorTest {
+    private String generateString(int length) {
+        byte[] array = new byte[length];
+        new Random().nextBytes(array);
+        return new String(array, StandardCharsets.UTF_8);
+    }
+
     @Test
     void testSendRequest() throws IOException, ObjectNotFoundException {
-        String name = "Name2";
+        String name = generateString(10);
         MidpointDTO dto = new UserDTO(name, "GivenName", "FamilyName", "EmailAddress");
         MidpointCreator creator = new UserCreator();
         int responseCode = creator.sendRequest(dto);
