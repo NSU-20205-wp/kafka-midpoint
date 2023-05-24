@@ -18,18 +18,13 @@ import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static ru.nsu.ccfit.kafka_midpoint.utilities.StringUtilities.generateString;
 
 class RoleCreatorTest {
-    private String generateString(int length) {
-        byte[] array = new byte[length];
-        new Random().nextBytes(array);
-        return new String(array, StandardCharsets.UTF_8);
-    }
 
     @Test
     void testSendRequest() throws IOException, ObjectNotFoundException {
         String name = generateString(10);
-        List<AssignmentDTO> assignmentDTOS = new ArrayList<>();
         MidpointDTO dto = new RoleDTO();
         dto.setName(name);
         MidpointCreator creator = new RoleCreator();
