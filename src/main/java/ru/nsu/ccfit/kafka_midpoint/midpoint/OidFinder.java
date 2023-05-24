@@ -18,39 +18,35 @@ public class OidFinder {
 
     public static String findUserOid(String field, String value) throws ObjectNotFoundException, IOException {
         UserSearcher userSearcher = new UserSearcher();
-        userSearcher.sendSearchRequestForOneField(field, value);
-        ArrayList<UserDTO> listUsers = new ArrayList<>(userSearcher.getListObjects());
-        if (listUsers == null ) {
-            throw new ObjectNotFoundException("user with " +field + " '" + value + "' not found");
+        ArrayList<UserDTO> listUsers = new ArrayList<>(userSearcher.getListObjects(field, value));
+        if (listUsers.isEmpty()) {
+            throw new ObjectNotFoundException("user with " + field + " '" + value + "' not found");
         }
         return listUsers.get(0).getOid();
     }
 
     public static String findRoleOid(String field, String value) throws ObjectNotFoundException, IOException {
         RoleSearcher roleSearcher = new RoleSearcher();
-        roleSearcher.sendSearchRequestForOneField(field, value);
-        ArrayList<RoleDTO> listRoles = new ArrayList<>(roleSearcher.getListObjects());
-        if (listRoles == null ) {
-            throw new ObjectNotFoundException("role with " +field + " '" + value + "' not found");
+        ArrayList<RoleDTO> listRoles = new ArrayList<>(roleSearcher.getListObjects(field, value));
+        if (listRoles.isEmpty()) {
+            throw new ObjectNotFoundException("role with " + field + " '" + value + "' not found");
         }
         return listRoles.get(0).getOid();
     }
     public static String findConnectorOid(String field, String value) throws ObjectNotFoundException, IOException {
         ConnectorSearcher connectorSearcher = new ConnectorSearcher();
-        connectorSearcher.sendSearchRequestForOneField(field, value);
-        List<ConnectorDTO> listConnectors = connectorSearcher.getListObjects();
-        if (listConnectors == null ) {
-            throw new ObjectNotFoundException("connector with " +field + " '" + value + "' not found");
+        List<ConnectorDTO> listConnectors = connectorSearcher.getListObjects(field, value);
+        if (listConnectors.isEmpty()) {
+            throw new ObjectNotFoundException("connector with " + field + " '" + value + "' not found");
         }
         return listConnectors.get(0).getOid();
     }
 
     public static String findResourceOid(String field, String value) throws ObjectNotFoundException, IOException {
         ResourceSearcher resourceSearcher = new ResourceSearcher();
-        resourceSearcher.sendSearchRequestForOneField(field, value);
-        List<ResourceDTO> listResources = resourceSearcher.getListObjects();
-        if (listResources == null ) {
-            throw new ObjectNotFoundException("resource with " +field + " '" + value + "' not found");
+        List<ResourceDTO> listResources = resourceSearcher.getListObjects(field, value);
+        if (listResources.isEmpty()) {
+            throw new ObjectNotFoundException("resource with " + field + " '" + value + "' not found");
         }
         return listResources.get(0).getOid();
     }

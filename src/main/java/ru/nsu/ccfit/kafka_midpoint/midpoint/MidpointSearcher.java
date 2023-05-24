@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.MidpointDTO;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class MidpointSearcher extends BaseMidpointCommunicator {
         connection.setRequestProperty("Accept", "application/json");
     }
 
-    public void sendSearchRequestForOneField(String nameField, String value) throws IOException {
+    private void sendSearchRequestForOneField(String nameField, String value) throws IOException {
 
         connection.connect();
         byte[] jsonBytes = JSONUtils.wrapper(JSONUtils.wrapper(
@@ -50,22 +51,29 @@ public class MidpointSearcher extends BaseMidpointCommunicator {
         in.close();
     }
 
-    public <T> List<T> getListObjects(TypeReference<ArrayList<T>> targetClass)  {
+    public <T extends MidpointDTO> List<T> getListObjects(String nameField, String value) throws IOException  {
+        return new ArrayList<>();
+    }
 
+    protected <T extends MidpointDTO> List<T> getListObjects(TypeReference<ArrayList<T>> targetClass,
+                                                             String nameField, String value) throws IOException {
+        sendSearchRequestForOneField(nameField, value);
         // Обработка полученных данных
         jsonResponse = stringResponse.toString();
         JSONArray jsonArray;
         try {
             jsonArray = new JSONObject(jsonResponse).getJSONObject("object").getJSONArray("object");
         } catch (JSONException exception) {
-            return null;
+            logger.warning(exception::getMessage);
+            return new ArrayList<>();
         }
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
             return objectMapper.readValue(jsonArray.toString(), targetClass);
         } catch (JsonProcessingException e) {
-            return null;
+            logger.warning(e::getMessage);
+            return new ArrayList<>();
         }
     }
 

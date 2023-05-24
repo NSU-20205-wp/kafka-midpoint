@@ -32,7 +32,7 @@ public class BaseMidpointCommunicator {
         connection.setRequestProperty("Accept", "application/json");
 
         connection.setInstanceFollowRedirects(false);
-        connection.setConnectTimeout(200);
+        connection.setConnectTimeout(500);
 
     }
 

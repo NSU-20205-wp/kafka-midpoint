@@ -13,9 +13,9 @@ public class ConnectorSearcher extends MidpointSearcher {
         super("connector");
     }
 
-    public List<ConnectorDTO> getListObjects() {
+    public List<ConnectorDTO> getListObjects(String nameField, String value) throws IOException {
         return super.getListObjects(new TypeReference<>() {
-        });
+        }, nameField, value);
     }
 }
 

@@ -14,8 +14,8 @@ public class UserSearcher extends MidpointSearcher {
         super("user");
     }
 
-    public List<UserDTO> getListObjects() {
+    public List<UserDTO> getListObjects(String nameField, String value) throws IOException  {
         return super.getListObjects(new TypeReference<>() {
-        });
+        }, nameField, value);
     }
 }

@@ -13,9 +13,9 @@ public class RoleSearcher extends MidpointSearcher {
         super("role");
     }
 
-    public List<RoleDTO> getListObjects() {
+    public List<RoleDTO> getListObjects(String nameField, String value) throws IOException  {
         return super.getListObjects(new TypeReference<>() {
-        });
+        }, nameField, value);
     }
 }
 

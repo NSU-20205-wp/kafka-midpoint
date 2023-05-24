@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointCreator;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointDeleter;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointSearcher;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.MidpointDTO;
 import ru.nsu.ccfit.kafka_midpoint.processing.factory.AbstractFactory;
 import ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.ProductCreatorException;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
@@ -38,34 +40,50 @@ public class ProcessMessageTask implements Callable<String> {
             logger.info(() -> "requested to perform " + operation + " on " + what);
             int responseCode;
             HashMap<String, Object> res = new HashMap<>();
-            if (operation.equals("create")) {
-                MidpointDTO dto =
-                        (MidpointDTO) abstractFactory.getFactory("dto").createProduct(
-                                what, new String[]{mapper.writeValueAsString(params.get("params"))});
-                MidpointCreator creator =
-                        (MidpointCreator) abstractFactory.getFactory(operation).createProduct(what, null);
-                responseCode = creator.sendRequest(dto);
-                if (responseCode / 100 == 2) {
-                    res.put("info", what + " created");
+            // TODO: maybe we should create enum with method, to handle each situation
+            switch (operation) {
+                case "create" -> {
+                    MidpointDTO dto =
+                            (MidpointDTO) abstractFactory.getFactory("dto").createProduct(
+                                    what, new String[]{mapper.writeValueAsString(params.get("params"))});
+                    MidpointCreator creator =
+                            (MidpointCreator) abstractFactory.getFactory(operation).createProduct(what, null);
+                    responseCode = creator.sendRequest(dto);
+                    if (responseCode / 100 == 2) {
+                        res.put("info", what + " created");
+                    }
+                    res.putIfAbsent("info", null);
                 }
-                res.putIfAbsent("info", null);
-            }
-            else if (operation.equals("delete")) {
-                MidpointDTO dto =
-                        (MidpointDTO) abstractFactory.getFactory("dto").createProduct(
-                                what, new String[]{mapper.writeValueAsString(params.get("params"))});
-                MidpointDeleter deleter =
-                        (MidpointDeleter) abstractFactory.getFactory(operation).createProduct(
-                                what, new String[]{dto.getName()});
-                responseCode = deleter.delete();
-                if (responseCode / 100 == 2) {
-                    res.put("info", what + " deleted");
+                case "delete" -> {
+                    MidpointDTO dto =
+                            (MidpointDTO) abstractFactory.getFactory("dto").createProduct(
+                                    what, new String[]{mapper.writeValueAsString(params.get("params"))});
+                    MidpointDeleter deleter =
+                            (MidpointDeleter) abstractFactory.getFactory(operation).createProduct(
+                                    what, new String[]{dto.getName()});
+                    responseCode = deleter.delete();
+                    if (responseCode / 100 == 2) {
+                        res.put("info", what + " deleted");
+                    }
+                    res.putIfAbsent("info", null);
                 }
-                res.putIfAbsent("info", null);
-            }
-            else {
-                responseCode = 400;
-                res.put("info", "operation <" + operation + "> not supported");
+                case "search" -> {
+                    Map<String, Object> concreteParams = (Map<String, Object>) params.get("params");
+                    String fieldName = (String) concreteParams.get("fieldName");
+                    String value = (String) concreteParams.get("value");
+                    MidpointSearcher searcher =
+                            (MidpointSearcher) abstractFactory.getFactory(operation).createProduct(what, null);
+                    List<MidpointDTO> objs = searcher.getListObjects(fieldName, value);
+                    responseCode = searcher.getResponseCode();
+                    if (responseCode / 100 == 2) {
+                        res.put("info", objs);
+                    }
+                    res.putIfAbsent("info", null);
+                }
+                default -> {
+                    responseCode = 400;
+                    res.put("info", "operation <" + operation + "> not supported");
+                }
             }
             logger.info(() -> "Response code: " + responseCode);
             res.put("responseCode", responseCode);

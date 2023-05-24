@@ -13,9 +13,9 @@ public class ResourceSearcher extends MidpointSearcher {
         super("resource");
     }
 
-    public List<ResourceDTO> getListObjects() {
+    public List<ResourceDTO> getListObjects(String nameField, String value) throws IOException  {
         return super.getListObjects(new TypeReference<>() {
-        });
+        }, nameField, value);
     }
 }
 
