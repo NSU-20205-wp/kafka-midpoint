@@ -1,14 +1,13 @@
 package ru.nsu.ccfit.kafka_midpoint.processing;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointCreator;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.MidpointDTO;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.factory.DTOFactory;
+import ru.nsu.ccfit.kafka_midpoint.processing.factory.AbstractFactory;
+import ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.ProductCreatorException;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -32,12 +31,14 @@ public class ProcessMessageTask implements Callable<String> {
         try {
             Map<String, Object> params = mapper.readValue(message, new TypeReference<>(){});
             String what = (String) params.get("what");
-            MidpointDTO dto = DTOFactory.instance().getDto(what, mapper.writeValueAsString(params.get("params")));
+            AbstractFactory abstractFactory = AbstractFactory.instance();
+            MidpointDTO dto =
+                    (MidpointDTO) abstractFactory.getFactory("dto").createProduct(what, new String[]{mapper.writeValueAsString(params.get("params"))});
 
             String operation = (String) params.get("operation");
             logger.info(() -> "requested to perform " + operation + " on " + what);
             if (operation.equals("create")) {
-                MidpointCreator creator = CreatorsFactory.instance().getCreator(dto.getClass().getName());
+                MidpointCreator creator = (MidpointCreator) abstractFactory.getFactory("creator").createProduct(what, null);
                 int responseCode = creator.sendRequest(dto);
 
                 logger.info(() -> "Response code: " + responseCode);
@@ -50,8 +51,7 @@ public class ProcessMessageTask implements Callable<String> {
                 throw new RuntimeException("operation <" + operation + "> not supported");
             }
         }
-        catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException |
-                 IllegalAccessException | IOException e) {
+        catch (ProductCreatorException | IOException e) {
             throw new RuntimeException(e);
         }
 
