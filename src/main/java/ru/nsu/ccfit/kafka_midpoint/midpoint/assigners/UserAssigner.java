@@ -27,7 +27,7 @@ public class UserAssigner {
         return targetRef;
     }
 
-    public int assingRole(String roleName) throws ObjectNotFoundException, IOException {
+    public int assignRole(String roleName) throws ObjectNotFoundException, IOException {
         return modifier.updateField("assignment", buildValueForRole(roleName), ModificationType.ADD);
     }
 

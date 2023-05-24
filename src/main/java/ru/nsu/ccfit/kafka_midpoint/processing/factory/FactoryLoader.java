@@ -24,7 +24,9 @@ public class FactoryLoader implements AutoCloseable {
             if(currentChar <= 0 || currentChar == '\n') {
                 break;
             }
-            builder.append((char) currentChar);
+            if (currentChar != '\r') {
+                builder.append((char) currentChar);
+            }
         }
         if(resource.available() == 0 && builder.isEmpty()) {
             return null;

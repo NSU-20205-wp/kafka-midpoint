@@ -2,3 +2,4 @@ ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.JSONProductCreator
 ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.MidpointDTO
 role ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.RoleDTO
 user ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.UserDTO
+resource ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.ResourceDTO

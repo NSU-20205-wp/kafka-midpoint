@@ -38,7 +38,7 @@ public class ProcessMessageTask implements Callable<String> {
             String operation = (String) params.get("operation");
             logger.info(() -> "requested to perform " + operation + " on " + what);
             if (operation.equals("create")) {
-                MidpointCreator creator = (MidpointCreator) abstractFactory.getFactory("creator").createProduct(what, null);
+                MidpointCreator creator = (MidpointCreator) abstractFactory.getFactory("create").createProduct(what, null);
                 int responseCode = creator.sendRequest(dto);
 
                 logger.info(() -> "Response code: " + responseCode);
