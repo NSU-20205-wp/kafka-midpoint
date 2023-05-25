@@ -9,12 +9,15 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.deleters.UserDeleter;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.MidpointDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.UserDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.ProductCreatorException;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.UserSearcher;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,21 +26,27 @@ import static ru.nsu.ccfit.kafka_midpoint.utilities.StringUtilities.generateStri
 class UserCreatorTest {
 
     @Test
-    void testSendRequest() throws IOException, ObjectNotFoundException {
+    void testSendRequest() throws IOException, ObjectNotFoundException, ProductCreatorException {
         String name = generateString(10);
-        MidpointDTO dto = new UserDTO(name, "GivenName", "FamilyName", "EmailAddress");
         MidpointCreator creator = new UserCreator();
-        int responseCode = creator.sendRequest(dto);
+        Map<String, Object> createParams = new HashMap<>();
+        createParams.put("name", name);
+        creator.doOperation(createParams);
+        int responseCode = creator.getResponseCode();
         assertEquals(2, responseCode / 100);
 
         MidpointSearcher searcher = new UserSearcher();
+        Map<String, Object> searchParams = new HashMap<>();
+        searchParams.put("fieldName", "name");
+        searchParams.put("value", name);
+        ArrayList<UserDTO> response = (ArrayList<UserDTO>) searcher.doOperation(searchParams);
         responseCode = searcher.getResponseCode();
         assertEquals(2, responseCode / 100);
-        searcher.sendSearchRequestForOneField("name", name);
-//        searcher.getListObjects();
+        assertEquals(createParams.get("name"), response.get(0).getName());
 
-        MidpointDeleter deleter = new UserDeleter(name);
-        responseCode = deleter.delete();
+        MidpointDeleter deleter = new UserDeleter();
+        deleter.doOperation(createParams);
+        responseCode = deleter.getResponseCode();
         assertEquals(2, responseCode / 100);
     }
 }
