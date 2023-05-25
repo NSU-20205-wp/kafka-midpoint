@@ -1,15 +1,14 @@
 package ru.nsu.ccfit.kafka_midpoint.processing;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointCreator;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.MidpointDTO;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.factory.DTOFactory;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.BaseMidpointCommunicator;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.AbstractFactory;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.ProductCreatorException;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
@@ -32,26 +31,26 @@ public class ProcessMessageTask implements Callable<String> {
         try {
             Map<String, Object> params = mapper.readValue(message, new TypeReference<>(){});
             String what = (String) params.get("what");
-            MidpointDTO dto = DTOFactory.instance().getDto(what, mapper.writeValueAsString(params.get("params")));
+            AbstractFactory abstractFactory = AbstractFactory.instance();
 
             String operation = (String) params.get("operation");
             logger.info(() -> "requested to perform " + operation + " on " + what);
-            if (operation.equals("create")) {
-                MidpointCreator creator = CreatorsFactory.instance().getCreator(dto.getClass().getName());
-                int responseCode = creator.sendRequest(dto);
-
-                logger.info(() -> "Response code: " + responseCode);
-                HashMap<String, Object> res = new HashMap<>();
-                res.put("responseCode", responseCode);
-                res.put("requestId", params.get("requestId"));
-                return mapper.writeValueAsString(res);
+            HashMap<String, Object> res = new HashMap<>();
+            BaseMidpointCommunicator communicator =
+                    (BaseMidpointCommunicator) abstractFactory.getFactory(operation).createProduct(what, null);
+            Object operationRes = communicator.doOperation((Map<String, Object>) params.get("params"));
+            int responseCode = communicator.getResponseCode();
+            if (responseCode / 100 == 2) {
+                res.put("info", operationRes);
             }
-            else {
-                throw new RuntimeException("operation <" + operation + "> not supported");
-            }
+            res.putIfAbsent("info", null);
+            logger.info(() -> "Response code: " + responseCode);
+            res.put("responseCode", responseCode);
+            res.put("requestId", params.get("requestId"));
+            return mapper.writeValueAsString(res);
         }
-        catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException |
-                 IllegalAccessException | IOException e) {
+        catch (ProductCreatorException | IOException e) {
+            logger.warning(e::getMessage);
             throw new RuntimeException(e);
         }
 

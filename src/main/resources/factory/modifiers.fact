@@ -1,0 +1,5 @@
+ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.SimpleProductCreator
+ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointModifier
+resource ru.nsu.ccfit.kafka_midpoint.midpoint.modifiers.ResourceModifier
+role ru.nsu.ccfit.kafka_midpoint.midpoint.modifiers.RoleModifier
+user ru.nsu.ccfit.kafka_midpoint.midpoint.modifiers.UserModifier
