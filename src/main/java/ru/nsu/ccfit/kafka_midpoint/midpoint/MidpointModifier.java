@@ -53,7 +53,6 @@ public class MidpointModifier extends BaseMidpointCommunicator {
         endpoint = endpoint.concat(oid);
         openConnection();
         connection.setRequestProperty("Content-Type", "application/json; utf-8");
-
         return updateField(fieldName, value, modificationType);
     }
 }

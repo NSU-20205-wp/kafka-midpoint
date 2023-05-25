@@ -13,11 +13,9 @@ import java.io.IOException;
 public class UserAssigner {
 
     private UserModifier modifier;
-    private final String nameUser;
 
     public UserAssigner(String nameUser) throws ObjectNotFoundException, IOException {
-        modifier = new UserModifier();
-        this.nameUser = nameUser;
+        modifier = new UserModifier(nameUser);
 
     }
 
