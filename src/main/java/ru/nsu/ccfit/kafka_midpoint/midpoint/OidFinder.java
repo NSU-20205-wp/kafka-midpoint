@@ -4,6 +4,8 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.ConnectorDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.ResourceDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.RoleDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.UserDTO;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.AbstractFactory;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.ProductCreatorException;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.ConnectorSearcher;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.ResourceSearcher;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.RoleSearcher;
@@ -12,8 +14,10 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.UserSearcher;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class OidFinder {
+    private static final Logger logger = Logger.getLogger(OidFinder.class.getCanonicalName());
 
     private OidFinder() {}
 
@@ -53,23 +57,19 @@ public class OidFinder {
     }
 
     public static String findOid(String typeObject, String field, String value) throws IOException {
-        switch (typeObject) {
-            case("role") -> {
-                return OidFinder.findRoleOid(field, value);
-            }
-            case("user") -> {
-                return OidFinder.findUserOid(field, value);
-            }
-            case("resource") -> {
-                return OidFinder.findResourceOid(field, value);
-            }
-            case("connector") -> {
-                return OidFinder.findConnectorOid(field, value);
-            }
-            default -> {
-                return null;
-            }
+        MidpointSearcher searcher;
+        try {
+            searcher = (MidpointSearcher) AbstractFactory.instance()
+                    .getFactory("search").createProduct(typeObject, null);
         }
+        catch(ProductCreatorException e) {
+            logger.severe(e.getMessage());
+            return null;
+        }
+        if(searcher == null) {
+            return null;
+        }
+        return searcher.getListObjects(field, value).get(0).getOid();
     }
 
 }
