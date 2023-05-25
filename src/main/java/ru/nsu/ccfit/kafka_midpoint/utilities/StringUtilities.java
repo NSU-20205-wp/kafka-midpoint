@@ -5,8 +5,13 @@ import java.util.Random;
 
 public class StringUtilities {
     static public String generateString(int length) {
-        byte[] array = new byte[length];
-        new Random().nextBytes(array);
-        return new String(array, StandardCharsets.UTF_8);
+        String chars = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder stringBuilder = new StringBuilder();
+        Random rnd = new Random();
+        while (stringBuilder.length() < length) {
+            int index = (int) (rnd.nextFloat() * chars.length());
+            stringBuilder.append(chars.charAt(index));
+        }
+        return stringBuilder.toString();
     }
 }
