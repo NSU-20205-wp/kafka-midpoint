@@ -66,8 +66,8 @@
 	</dependencies>
 
 		<build>
-			<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-			<testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
+			<sourceDirectory>${project.basedir}\src\main\java</sourceDirectory>
+			<testSourceDirectory>${project.basedir}\src\test\java</testSourceDirectory>
 			<plugins>
 				<plugin>
 					<groupId>org.springframework.boot</groupId>
@@ -94,6 +94,13 @@
 						</execution>
 					</executions>
 					<configuration>
+						<archive>
+							<manifest>
+								<mainClass>
+									ru.nsu.ccfit.kafka_midpoint.KafkaMidpointApplication
+								</mainClass>
+							</manifest>
+						</archive>
 						<images>
 							<image>
 								<name>${project.artifactId}</name>
@@ -107,7 +114,7 @@
 										<port>8080</port>
 									</ports>
 									<cmd>
-										<shell>java -cp 'jars/*' ru.nsu.ccfit.kafka_midpoint.KafkaMidpointApplication.java '/config.file'</shell>
+										<shell>java -jar jars/${project.build.finalName}.jar</shell>
 									</cmd>
 									<assembly>
 										<basedir>/</basedir>
