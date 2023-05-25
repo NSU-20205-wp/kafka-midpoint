@@ -1,10 +1,12 @@
 package ru.nsu.ccfit.kafka_midpoint.midpoint;
 
+import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.MidpointDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.AbstractFactory;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.ProductCreatorException;
 
 import java.io.IOException;
 import java.util.logging.Logger;
+import java.util.List;
 
 public class OidFinder {
     private static final Logger logger = Logger.getLogger(OidFinder.class.getCanonicalName());
@@ -24,7 +26,11 @@ public class OidFinder {
         if(searcher == null) {
             return null;
         }
-        return searcher.getListObjects(field, value).get(0).getOid();
+        List<? extends MidpointDTO> list = searcher.getListObjects(field, value);
+        if(list.isEmpty()) {
+            return null;
+        }
+        return list.get(0).getOid();
     }
 
 }
