@@ -2,6 +2,8 @@ package ru.nsu.ccfit.kafka_midpoint.processing;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.Serializers;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.BaseMidpointCommunicator;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointCreator;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointDeleter;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointSearcher;
@@ -38,45 +40,15 @@ public class ProcessMessageTask implements Callable<String> {
 
             String operation = (String) params.get("operation");
             logger.info(() -> "requested to perform " + operation + " on " + what);
-            int responseCode;
             HashMap<String, Object> res = new HashMap<>();
-            // TODO: maybe we should create enum with method, to handle each situation
-            switch (operation) {
-                case "create" -> {
-                    MidpointCreator creator =
-                            (MidpointCreator) abstractFactory.getFactory(operation).createProduct(what, null);
-                    responseCode = (int) creator.doOperation((Map<String, Object>) params.get("params"));
-                    if (responseCode / 100 == 2) {
-                        res.put("info", what + " created");
-                    }
-                    res.putIfAbsent("info", null);
-                }
-                case "delete" -> {
-                    MidpointDeleter deleter =
-                            (MidpointDeleter) abstractFactory.getFactory(operation).createProduct(
-                                    what, null);
-                    responseCode = (int) deleter.doOperation((Map<String, Object>) params.get("params"));
-                    if (responseCode / 100 == 2) {
-                        res.put("info", what + " deleted");
-                    }
-                    res.putIfAbsent("info", null);
-                }
-                case "search" -> {
-                    Map<String, Object> concreteParams = (Map<String, Object>) params.get("params");
-                    MidpointSearcher searcher =
-                            (MidpointSearcher) abstractFactory.getFactory(operation).createProduct(what, null);
-                    List<MidpointDTO> objs = (List<MidpointDTO>) searcher.doOperation(concreteParams);
-                    responseCode = searcher.getResponseCode();
-                    if (responseCode / 100 == 2) {
-                        res.put("info", objs);
-                    }
-                    res.putIfAbsent("info", null);
-                }
-                default -> {
-                    responseCode = 400;
-                    res.put("info", "operation <" + operation + "> not supported");
-                }
+            BaseMidpointCommunicator communicator =
+                    (BaseMidpointCommunicator) abstractFactory.getFactory(operation).createProduct(what, null);
+            Object operationRes = communicator.doOperation((Map<String, Object>) params.get("params"));
+            int responseCode = communicator.getResponseCode();
+            if (responseCode / 100 == 2) {
+                res.put("info", operationRes);
             }
+            res.putIfAbsent("info", null);
             logger.info(() -> "Response code: " + responseCode);
             res.put("responseCode", responseCode);
             res.put("requestId", params.get("requestId"));

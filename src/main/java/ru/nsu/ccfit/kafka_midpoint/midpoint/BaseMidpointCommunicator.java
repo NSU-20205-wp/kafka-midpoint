@@ -48,4 +48,8 @@ public abstract class BaseMidpointCommunicator {
     }
 
     public abstract Object doOperation(Map<String, Object> params) throws IOException, ProductCreatorException;
+
+    public int getResponseCode() throws IOException {
+        return connection.getResponseCode();
+    }
 }

@@ -79,10 +79,6 @@ public class MidpointSearcher extends BaseMidpointCommunicator {
         }
     }
 
-    public int getResponseCode() throws IOException {
-        return connection.getResponseCode();
-    }
-
     @Override
     public Object doOperation(Map<String, Object> params) throws IOException, ProductCreatorException {
         String fieldName = (String) params.get("fieldName");

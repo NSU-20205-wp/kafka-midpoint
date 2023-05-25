@@ -18,17 +18,12 @@ public class MidpointDeleter extends BaseMidpointCommunicator {
         operationType = "DELETE";
         endpoint = baseUrl + '/' + typeObject + "s/";
         logger.info(() -> typeObject + ":\n base url: " + baseUrl + "\n endpoint: " + endpoint);
-        //openConnection();
 
     }
 
     private int delete() throws IOException {
         connection.connect();
         responseCode = connection.getResponseCode();
-        return responseCode;
-    }
-
-    public int getResponseCode() {
         return responseCode;
     }
 
