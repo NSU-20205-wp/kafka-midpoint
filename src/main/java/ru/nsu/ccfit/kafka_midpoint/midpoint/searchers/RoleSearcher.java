@@ -5,7 +5,7 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointSearcher;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.RoleDTO;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 public class RoleSearcher extends MidpointSearcher {
 
@@ -13,9 +13,9 @@ public class RoleSearcher extends MidpointSearcher {
         super("role");
     }
 
-    public ArrayList<RoleDTO> getListObjects() {
+    public List<RoleDTO> getListObjects(String nameField, String value) throws IOException  {
         return super.getListObjects(new TypeReference<>() {
-        });
+        }, nameField, value);
     }
 }
 

@@ -1,13 +1,10 @@
 package ru.nsu.ccfit.kafka_midpoint.midpoint.modifiers;
 
-import ru.nsu.ccfit.kafka_midpoint.midpoint.OidFinder;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
-
-import java.io.IOException;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointModifier;
 
 public class RoleModifier extends MidpointModifier {
 
-    public RoleModifier(String name) throws IOException, ObjectNotFoundException {
-        super("role", OidFinder.findRoleOid("name", name));
+    public RoleModifier() {
+        super("role");
     }
 }

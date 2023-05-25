@@ -1,4 +1,5 @@
-ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.SimpleProductCreator
+ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.SimpleProductCreator
 ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointCreator
 role ru.nsu.ccfit.kafka_midpoint.midpoint.creators.RoleCreator
 user ru.nsu.ccfit.kafka_midpoint.midpoint.creators.UserCreator
+resource ru.nsu.ccfit.kafka_midpoint.midpoint.creators.ResourceCreator

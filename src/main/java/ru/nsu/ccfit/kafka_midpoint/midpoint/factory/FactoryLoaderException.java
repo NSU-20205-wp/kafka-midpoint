@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.kafka_midpoint.processing.factory;
+package ru.nsu.ccfit.kafka_midpoint.midpoint.factory;
 
 public class FactoryLoaderException extends Exception {
     public FactoryLoaderException() {

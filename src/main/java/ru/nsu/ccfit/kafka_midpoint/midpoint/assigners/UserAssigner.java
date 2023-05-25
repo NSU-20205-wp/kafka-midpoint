@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class UserAssigner {
 
-    UserModifier modifier;
+    private UserModifier modifier;
 
     public UserAssigner(String nameUser) throws ObjectNotFoundException, IOException {
         modifier = new UserModifier(nameUser);
@@ -27,7 +27,7 @@ public class UserAssigner {
         return targetRef;
     }
 
-    public int assingRole(String roleName) throws ObjectNotFoundException, IOException {
+    public int assignRole(String roleName) throws ObjectNotFoundException, IOException {
         return modifier.updateField("assignment", buildValueForRole(roleName), ModificationType.ADD);
     }
 

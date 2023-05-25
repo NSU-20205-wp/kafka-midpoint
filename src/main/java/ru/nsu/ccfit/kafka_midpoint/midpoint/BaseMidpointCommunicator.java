@@ -1,11 +1,14 @@
 package ru.nsu.ccfit.kafka_midpoint.midpoint;
 
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.ProductCreatorException;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
-public class BaseMidpointCommunicator {
+public abstract class BaseMidpointCommunicator {
 
     private final MidpointConfiguration midpointConfiguration = new MidpointConfiguration();
     protected String baseUrl;
@@ -14,7 +17,7 @@ public class BaseMidpointCommunicator {
     protected String typeObject;
     protected HttpURLConnection connection;
 
-    public BaseMidpointCommunicator() {
+    protected BaseMidpointCommunicator() {
         baseUrl = "http://" + midpointConfiguration.getMidpointHost() + ":" + midpointConfiguration.getMidpointPort() +
                 "/midpoint/ws/rest";
     }
@@ -32,15 +35,21 @@ public class BaseMidpointCommunicator {
         connection.setRequestProperty("Accept", "application/json");
 
         connection.setInstanceFollowRedirects(false);
-        connection.setConnectTimeout(200);
+        connection.setConnectTimeout(500);
 
     }
 
-    public int sendJsonRequest(String jsonRequest) throws IOException {
+    protected int sendJsonRequest(String jsonRequest) throws IOException {
 
         connection.connect();
         byte[] jsonBytes = jsonRequest.getBytes(StandardCharsets.UTF_8);
         connection.getOutputStream().write(jsonBytes);
+        return connection.getResponseCode();
+    }
+
+    public abstract Object doOperation(Map<String, Object> params) throws IOException, ProductCreatorException;
+
+    public int getResponseCode() throws IOException {
         return connection.getResponseCode();
     }
 }

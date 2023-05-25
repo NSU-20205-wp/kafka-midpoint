@@ -1,6 +1,6 @@
-package ru.nsu.ccfit.kafka_midpoint.processing.factory;
+package ru.nsu.ccfit.kafka_midpoint.midpoint.factory;
 
-import ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.ProductCreator;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.ProductCreator;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +24,9 @@ public class FactoryLoader implements AutoCloseable {
             if(currentChar <= 0 || currentChar == '\n') {
                 break;
             }
-            builder.append((char) currentChar);
+            if (currentChar != '\r') {
+                builder.append((char) currentChar);
+            }
         }
         if(resource.available() == 0 && builder.isEmpty()) {
             return null;
