@@ -17,7 +17,7 @@ public abstract class BaseMidpointCommunicator {
     protected String typeObject;
     protected HttpURLConnection connection;
 
-    public BaseMidpointCommunicator() {
+    protected BaseMidpointCommunicator() {
         baseUrl = "http://" + midpointConfiguration.getMidpointHost() + ":" + midpointConfiguration.getMidpointPort() +
                 "/midpoint/ws/rest";
     }
@@ -39,7 +39,7 @@ public abstract class BaseMidpointCommunicator {
 
     }
 
-    public int sendJsonRequest(String jsonRequest) throws IOException {
+    protected int sendJsonRequest(String jsonRequest) throws IOException {
 
         connection.connect();
         byte[] jsonBytes = jsonRequest.getBytes(StandardCharsets.UTF_8);

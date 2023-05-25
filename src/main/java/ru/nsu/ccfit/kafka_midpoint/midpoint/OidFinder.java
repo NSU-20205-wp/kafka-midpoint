@@ -15,6 +15,8 @@ import java.util.List;
 
 public class OidFinder {
 
+    private OidFinder() {}
+
     public static String findUserOid(String field, String value) throws IOException {
         UserSearcher userSearcher = new UserSearcher();
         ArrayList<UserDTO> listUsers = new ArrayList<>(userSearcher.getListObjects(field, value));
@@ -48,6 +50,26 @@ public class OidFinder {
             return null;
         }
         return listResources.get(0).getOid();
+    }
+
+    public static String findOid(String typeObject, String field, String value) throws IOException {
+        switch (typeObject) {
+            case("role") -> {
+                return OidFinder.findRoleOid(field, value);
+            }
+            case("user") -> {
+                return OidFinder.findUserOid(field, value);
+            }
+            case("resource") -> {
+                return OidFinder.findResourceOid(field, value);
+            }
+            case("connector") -> {
+                return OidFinder.findConnectorOid(field, value);
+            }
+            default -> {
+                return null;
+            }
+        }
     }
 
 }

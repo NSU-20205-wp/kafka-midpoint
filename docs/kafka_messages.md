@@ -38,7 +38,24 @@ For <b>kafka-magic</b>: if you want to use such format, you <b>should</b> select
             "what": "user", // also may be role, resource or connector
             "params": {
                 "fieldName": "name",
-                "value": "user"
+                "value": "user_test"
             }
         }
     }
+
+### Modify
+    
+    {
+        "Message": {
+            "requestId": 20,
+            "operation": "modify",
+            "what": "user", // also may be role or resource
+            "params": {
+                "name": "user_test",
+                "modType": "add",
+                "fieldName": "fullName",
+                "value": "Ivan"
+            }
+        }
+    }
+    

@@ -10,9 +10,7 @@ public class MidpointDeleter extends BaseMidpointCommunicator {
 
     private static final Logger logger = Logger.getLogger(MidpointDeleter.class.getName());
 
-    private int responseCode;
-
-    public MidpointDeleter(String typeObject) throws IOException {
+    public MidpointDeleter(String typeObject) {
         super();
         this.typeObject = typeObject;
         operationType = "DELETE";
@@ -23,22 +21,13 @@ public class MidpointDeleter extends BaseMidpointCommunicator {
 
     private int delete() throws IOException {
         connection.connect();
-        responseCode = connection.getResponseCode();
-        return responseCode;
+        return connection.getResponseCode();
     }
-
-    // TODO: do something with switch
 
     @Override
     public Object doOperation(Map<String, Object> params) throws IOException, ProductCreatorException {
-        String oid;
         logger.info(() -> "deleter typeObject: " + typeObject);
-        switch (typeObject) {
-            case("role") -> oid = OidFinder.findRoleOid("name", (String) params.get("name"));
-            case("user") -> oid = OidFinder.findUserOid("name", (String) params.get("name"));
-            case("resource") -> oid = OidFinder.findResourceOid("name", (String) params.get("name"));
-            default -> oid = null;
-        }
+        String oid = OidFinder.findOid(typeObject, "name", (String) params.get("name"));
         logger.info(() -> "found oid: " + oid);
         if (oid == null) {
             return null;

@@ -5,7 +5,6 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointSearcher;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.UserDTO;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserSearcher extends MidpointSearcher {
