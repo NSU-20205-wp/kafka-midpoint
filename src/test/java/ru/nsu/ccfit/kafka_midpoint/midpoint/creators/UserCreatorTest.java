@@ -1,5 +1,6 @@
 package ru.nsu.ccfit.kafka_midpoint.midpoint.creators;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointCreator;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointDeleter;
@@ -13,6 +14,7 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.UserSearcher;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,9 +31,10 @@ class UserCreatorTest {
         assertEquals(2, responseCode / 100);
 
         MidpointSearcher searcher = new UserSearcher();
-        searcher.sendSearchRequestForOneField("name", name);
         responseCode = searcher.getResponseCode();
         assertEquals(2, responseCode / 100);
+        searcher.sendSearchRequestForOneField("name", name);
+//        searcher.getListObjects();
 
         MidpointDeleter deleter = new UserDeleter(name);
         responseCode = deleter.delete();
