@@ -7,7 +7,7 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
 import java.io.IOException;
 
 public class UserDeleter extends MidpointDeleter {
-    public UserDeleter(String name) throws IOException, ObjectNotFoundException {
-        super("user", OidFinder.findUserOid("name", name));
+    public UserDeleter() throws IOException, ObjectNotFoundException {
+        super("user");
     }
 }

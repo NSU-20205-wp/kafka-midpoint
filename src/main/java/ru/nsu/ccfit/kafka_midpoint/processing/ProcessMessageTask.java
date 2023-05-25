@@ -43,25 +43,19 @@ public class ProcessMessageTask implements Callable<String> {
             // TODO: maybe we should create enum with method, to handle each situation
             switch (operation) {
                 case "create" -> {
-                    MidpointDTO dto =
-                            (MidpointDTO) abstractFactory.getFactory("dto").createProduct(
-                                    what, new String[]{mapper.writeValueAsString(params.get("params"))});
                     MidpointCreator creator =
                             (MidpointCreator) abstractFactory.getFactory(operation).createProduct(what, null);
-                    responseCode = creator.sendRequest(dto);
+                    responseCode = (int) creator.doOperation((Map<String, Object>) params.get("params"));
                     if (responseCode / 100 == 2) {
                         res.put("info", what + " created");
                     }
                     res.putIfAbsent("info", null);
                 }
                 case "delete" -> {
-                    MidpointDTO dto =
-                            (MidpointDTO) abstractFactory.getFactory("dto").createProduct(
-                                    what, new String[]{mapper.writeValueAsString(params.get("params"))});
                     MidpointDeleter deleter =
                             (MidpointDeleter) abstractFactory.getFactory(operation).createProduct(
-                                    what, new String[]{dto.getName()});
-                    responseCode = deleter.delete();
+                                    what, null);
+                    responseCode = (int) deleter.doOperation((Map<String, Object>) params.get("params"));
                     if (responseCode / 100 == 2) {
                         res.put("info", what + " deleted");
                     }
@@ -69,11 +63,9 @@ public class ProcessMessageTask implements Callable<String> {
                 }
                 case "search" -> {
                     Map<String, Object> concreteParams = (Map<String, Object>) params.get("params");
-                    String fieldName = (String) concreteParams.get("fieldName");
-                    String value = (String) concreteParams.get("value");
                     MidpointSearcher searcher =
                             (MidpointSearcher) abstractFactory.getFactory(operation).createProduct(what, null);
-                    List<MidpointDTO> objs = searcher.getListObjects(fieldName, value);
+                    List<MidpointDTO> objs = (List<MidpointDTO>) searcher.doOperation(concreteParams);
                     responseCode = searcher.getResponseCode();
                     if (responseCode / 100 == 2) {
                         res.put("info", objs);

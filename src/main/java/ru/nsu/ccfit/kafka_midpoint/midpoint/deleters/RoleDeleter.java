@@ -3,11 +3,13 @@ package ru.nsu.ccfit.kafka_midpoint.midpoint.deleters;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointDeleter;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.OidFinder;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
+import ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.ProductCreatorException;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class RoleDeleter extends MidpointDeleter {
-    public RoleDeleter(String name) throws IOException, ObjectNotFoundException {
-        super("role", OidFinder.findRoleOid("name", name));
+    public RoleDeleter() throws IOException, ObjectNotFoundException {
+        super("role");
     }
 }

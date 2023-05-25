@@ -1,11 +1,14 @@
 package ru.nsu.ccfit.kafka_midpoint.midpoint;
 
+import ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.ProductCreatorException;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
-public class BaseMidpointCommunicator {
+public abstract class BaseMidpointCommunicator {
 
     private final MidpointConfiguration midpointConfiguration = new MidpointConfiguration();
     protected String baseUrl;
@@ -43,4 +46,6 @@ public class BaseMidpointCommunicator {
         connection.getOutputStream().write(jsonBytes);
         return connection.getResponseCode();
     }
+
+    public abstract Object doOperation(Map<String, Object> params) throws IOException, ProductCreatorException;
 }

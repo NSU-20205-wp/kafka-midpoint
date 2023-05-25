@@ -1,12 +1,11 @@
-package ru.nsu.ccfit.kafka_midpoint.midpoint.modifiers;
+package ru.nsu.ccfit.kafka_midpoint.midpoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.BaseMidpointCommunicator;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.JSONUtils;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.ModificationType;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.ItemDeltaDTO;
+import ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.ProductCreatorException;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class MidpointModifier extends BaseMidpointCommunicator {
@@ -39,4 +38,10 @@ public class MidpointModifier extends BaseMidpointCommunicator {
         String jsonRequest = JSONUtils.wrapper("objectModification",
                 JSONUtils.wrapper("itemDelta", mapper.writeValueAsString(mapper.valueToTree(itemDeltaDTO))));
         return sendJsonRequest(jsonRequest);
-    }}
+    }
+
+    @Override
+    public Object doOperation(Map<String, Object> params) throws IOException, ProductCreatorException {
+        return null;
+    }
+}

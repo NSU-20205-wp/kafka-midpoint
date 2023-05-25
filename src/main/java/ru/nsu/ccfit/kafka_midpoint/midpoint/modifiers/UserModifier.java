@@ -1,5 +1,6 @@
 package ru.nsu.ccfit.kafka_midpoint.midpoint.modifiers;
 
+import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointModifier;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.OidFinder;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
 
