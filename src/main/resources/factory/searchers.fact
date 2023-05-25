@@ -1,4 +1,4 @@
-ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.SimpleProductCreator
+ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.SimpleProductCreator
 ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointSearcher
 connector ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.ConnectorSearcher
 resource ru.nsu.ccfit.kafka_midpoint.midpoint.searchers.ResourceSearcher

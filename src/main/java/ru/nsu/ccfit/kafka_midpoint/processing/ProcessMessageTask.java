@@ -2,14 +2,9 @@ package ru.nsu.ccfit.kafka_midpoint.processing;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.BaseMidpointCommunicator;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointCreator;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointDeleter;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointSearcher;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.MidpointDTO;
-import ru.nsu.ccfit.kafka_midpoint.processing.factory.AbstractFactory;
-import ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.ProductCreatorException;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.AbstractFactory;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.ProductCreatorException;
 
 import java.io.IOException;
 import java.util.HashMap;

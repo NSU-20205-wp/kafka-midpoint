@@ -1,6 +1,6 @@
-package ru.nsu.ccfit.kafka_midpoint.processing.factory;
+package ru.nsu.ccfit.kafka_midpoint.midpoint.factory;
 
-import ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.ProductCreator;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.ProductCreator;
 
 import java.io.IOException;
 import java.io.InputStream;

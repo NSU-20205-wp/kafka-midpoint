@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.kafka_midpoint.processing.factory.creator;
+package ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;

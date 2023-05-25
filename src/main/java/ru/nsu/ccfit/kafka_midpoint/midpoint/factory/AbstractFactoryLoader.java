@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.kafka_midpoint.processing.factory;
+package ru.nsu.ccfit.kafka_midpoint.midpoint.factory;
 
 import java.io.IOException;
 import java.io.InputStream;

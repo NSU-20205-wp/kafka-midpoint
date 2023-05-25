@@ -3,8 +3,8 @@ package ru.nsu.ccfit.kafka_midpoint.midpoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.MidpointDTO;
-import ru.nsu.ccfit.kafka_midpoint.processing.factory.AbstractFactory;
-import ru.nsu.ccfit.kafka_midpoint.processing.factory.creator.ProductCreatorException;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.AbstractFactory;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.ProductCreatorException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
