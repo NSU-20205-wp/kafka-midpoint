@@ -38,6 +38,21 @@ services:
     volumes:
       - pg-midpoint_data:/var/lib/postgresql/data
 
+  postgresql-crm:
+    image: postgres:13-alpine
+    container_name: book-postgresql-crm-chapter-2
+    environment:
+      - POSTGRES_PASSWORD=qwe123
+      - POSTGRES_USER=crm
+      - POSTGRES_INITDB_ARGS=--lc-collate=en_US.utf8 --lc-ctype=en_US.utf8
+    ports:
+      - 25432:5432
+    networks:
+      - net
+    volumes:
+      - pg-crm_data:/var/lib/postgresql/data
+      - ./book-chapter-common/container-book-postgres-crm_files:/docker-entrypoint-initdb.d/:ro
+
   ldap:
     image: osixia/openldap:stable
     container_name: book-ldap-chapter-2
@@ -59,7 +74,7 @@ services:
     image: evolveum/midpoint:latest-alpine
     container_name: book-midpoint-chapter-2
     ports:
-      - 8080:8080
+      - "8080:8080"
     environment:
       - MP_ENTRY_POINT=/opt/midpoint-dirs-docker-entrypoint
       - REPO_DATABASE_TYPE=postgresql
@@ -79,10 +94,11 @@ services:
       - ./book/book-chapter-2/container-book-midpoint_files/resources:/resources
     depends_on:
       - ldap
+      - postgresql-crm
       - postgresql-midpoint
 
 networks:
-  net:
+  net:    
     driver: bridge
 
 secrets:
@@ -100,3 +116,6 @@ volumes:
     name: book-ldap_data-chapter-2
   pg-midpoint_data:
     name: book-postgresql-midpoint_data-chapter-2
+  pg-crm_data:
+    name: book-postgresql-crm_data-chapter-2
+
