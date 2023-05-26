@@ -126,7 +126,7 @@
 													</file>
 													<file>
 														<source>${project.basedir}/src/main/resources/application.properties</source>
-														<outputDirectory>/</outputDirectory>
+														<outputDirectory>./</outputDirectory>
 													</file>
 												</files>
 											</inline>
