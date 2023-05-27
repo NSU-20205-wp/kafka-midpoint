@@ -20,7 +20,7 @@ public class UserAssigner {
     }
 
     private ObjectNode buildValueForRole(String roleName) throws ObjectNotFoundException, IOException {
-        TargetRefDTO targetRefDTO = new TargetRefDTO(OidFinder.findRoleOid("name", roleName), "RoleType");
+        TargetRefDTO targetRefDTO = new TargetRefDTO(OidFinder.findOid("role", "name", roleName), "RoleType");
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode targetRef = mapper.createObjectNode();
         targetRef.set("targetRef", mapper.valueToTree(targetRefDTO));
@@ -40,7 +40,7 @@ public class UserAssigner {
         ObjectNode root = objectMapper.createObjectNode();
         ObjectNode constructionNode = objectMapper.createObjectNode();
         ObjectNode resourceRefNode = objectMapper.createObjectNode();
-        resourceRefNode.put("oid", OidFinder.findResourceOid("name", resourceName));
+        resourceRefNode.put("oid", OidFinder.findOid("resource","name", resourceName));
         constructionNode.set("resourceRef", resourceRefNode);
         root.set("construction", constructionNode);
         return root;
