@@ -71,7 +71,7 @@ services:
       - ./book-chapter-common/container-book-ldap_files:/container/service/slapd/assets/config/bootstrap/ldif/custom/:ro
 
   midpoint:
-    image: evolveum/midpoint:latest-alpine
+    image: evolveum/midpoint:${MP_VERSION:-4.6}-alpine
     container_name: book-midpoint-chapter-2
     ports:
       - "8080:8080"
