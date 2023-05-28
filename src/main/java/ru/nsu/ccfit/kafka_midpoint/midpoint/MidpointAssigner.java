@@ -1,7 +1,7 @@
 package ru.nsu.ccfit.kafka_midpoint.midpoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.builders.ValueBuilder;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.assignments.Assignment;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.ItemDeltaDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.AbstractFactory;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.ProductCreatorException;
@@ -21,7 +21,7 @@ public class MidpointAssigner extends BaseMidpointCommunicator {
         logger.info(() -> typeObject + ":\n base url: " + baseUrl + "\n endpoint: " + endpoint);
     }
 
-    public int updateField(Object assignments,
+    private int updateField(Object assignments,
                            ModificationType modificationType) throws IOException {
         ItemDeltaDTO itemDeltaDTO = new ItemDeltaDTO(modificationType, "assignment", assignments);
         ObjectMapper mapper = new ObjectMapper();
@@ -56,7 +56,7 @@ public class MidpointAssigner extends BaseMidpointCommunicator {
         connection.setRequestProperty("Content-Type", "application/json; utf-8");
 
         try {
-            ValueBuilder builder = (ValueBuilder) AbstractFactory.instance().getFactory("build")
+            Assignment builder = (Assignment) AbstractFactory.instance().getFactory("build")
                         .createProduct(targetType, null);
             return updateField(builder.buildValue(targetName), modificationType);
         }

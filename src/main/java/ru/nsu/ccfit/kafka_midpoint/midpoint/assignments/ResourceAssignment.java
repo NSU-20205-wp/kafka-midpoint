@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.kafka_midpoint.midpoint.builders;
+package ru.nsu.ccfit.kafka_midpoint.midpoint.assignments;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -6,7 +6,7 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.OidFinder;
 
 import java.io.IOException;
 
-public class ResourceBuilder implements ValueBuilder {
+public class ResourceAssignment implements Assignment {
     @Override
     public ObjectNode buildValue(String name) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();

@@ -1,4 +1,4 @@
 ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.OneTimeProductCreator
-ru.nsu.ccfit.kafka_midpoint.midpoint.builders.ValueBuilder
-role ru.nsu.ccfit.kafka_midpoint.midpoint.builders.RoleBuilder
-resource ru.nsu.ccfit.kafka_midpoint.midpoint.builders.ResourceBuilder
+ru.nsu.ccfit.kafka_midpoint.midpoint.assignments.Assignment
+role ru.nsu.ccfit.kafka_midpoint.midpoint.assignments.RoleAssignment
+resource ru.nsu.ccfit.kafka_midpoint.midpoint.assignments.ResourceAssignment
