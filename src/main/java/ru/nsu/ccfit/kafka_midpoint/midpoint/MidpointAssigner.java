@@ -1,10 +1,7 @@
 package ru.nsu.ccfit.kafka_midpoint.midpoint;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.AssignmentRequestDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.MidpointException;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.ProductCreatorException;
 
 import java.io.IOException;
 import java.util.Map;
@@ -21,21 +18,6 @@ public class MidpointAssigner extends BaseMidpointCommunicator {
         logger.info(() -> typeObject + ":\n base url: " + baseUrl + "\n endpoint: " + endpoint);
     }
 
-    private int assign(String modType, String targetType,
-                       String targetOid) throws IOException {
-        AssignmentRequestDTO.AssignmentContentDTO contentDTO =
-                new AssignmentRequestDTO.AssignmentContentDTO(targetOid, "RoleType");
-        AssignmentRequestDTO requestDTO = new AssignmentRequestDTO();
-        requestDTO.setValue(contentDTO);
-        requestDTO.setModificationType(modType);
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        String jsonRequest = JSONUtils.wrapper("objectModification",
-                JSONUtils.wrapper("itemDelta",
-                        mapper.writeValueAsString(mapper.valueToTree(requestDTO))));
-        return sendJsonRequest(jsonRequest);
-    }
     @Override
     public final Object doOperation(Map<String, Object> params) throws IOException {
         String objectName = (String) params.get("name");
@@ -52,8 +34,6 @@ public class MidpointAssigner extends BaseMidpointCommunicator {
         }
 
         User user;
-        openConnection();
-
         try {
             user = new User(objectName);
         }
@@ -63,7 +43,7 @@ public class MidpointAssigner extends BaseMidpointCommunicator {
         try {
             return user.modifyAssignment(targetType, targetName, modificationType);
         }
-        catch(Exception e) {
+        catch(MidpointException e) {
             logger.warning(e.getMessage());
             return null;
         }
