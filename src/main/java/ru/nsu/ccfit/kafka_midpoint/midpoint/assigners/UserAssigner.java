@@ -58,7 +58,8 @@ public class UserAssigner {
         return modifier.updateField("assignment", buildValueForResource(resourceName), ModificationType.DELETE);
     }
 
-    public int assign(String what, String name) throws MidpointException, IOException {
+    public int modifyAssignment(String what, String name, ModificationType type)
+            throws MidpointException, IOException {
         ValueBuilder builder;
         try {
             builder = (ValueBuilder) AbstractFactory.instance().getFactory("build")
@@ -67,20 +68,6 @@ public class UserAssigner {
         catch(ProductCreatorException e) {
             throw new CategoryNotFoundException(e);
         }
-        return modifier.updateField("assignment", builder.buildValue(name), ModificationType.ADD);
+        return modifier.updateField("assignment", builder.buildValue(name), type);
     }
-
-    public int revoke(String what, String name) throws MidpointException, IOException {
-        ValueBuilder builder;
-        try {
-            builder = (ValueBuilder) AbstractFactory.instance().getFactory("build")
-                    .createProduct(what, null);
-        }
-        catch(ProductCreatorException e) {
-            throw new CategoryNotFoundException(e);
-        }
-        return modifier.updateField("assignment", builder.buildValue(name), ModificationType.DELETE);
-    }
-
-
 }
