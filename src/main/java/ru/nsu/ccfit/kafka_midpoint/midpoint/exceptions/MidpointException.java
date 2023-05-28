@@ -5,8 +5,4 @@ public class MidpointException extends Exception {
     public MidpointException(String message) {
         super(message);
     }
-
-    public MidpointException(Throwable cause) {
-        super(cause);
-    }
 }
