@@ -1,7 +1,10 @@
 package ru.nsu.ccfit.kafka_midpoint.midpoint;
 
-import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.MidpointException;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.builders.ValueBuilder;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.ItemDeltaDTO;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.AbstractFactory;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.ProductCreatorException;
 
 import java.io.IOException;
 import java.util.Map;
@@ -16,6 +19,15 @@ public class MidpointAssigner extends BaseMidpointCommunicator {
         operationType = "POST";
         endpoint = baseUrl + '/' + typeObject + "s/";
         logger.info(() -> typeObject + ":\n base url: " + baseUrl + "\n endpoint: " + endpoint);
+    }
+
+    public int updateField(Object assignments,
+                           ModificationType modificationType) throws IOException {
+        ItemDeltaDTO itemDeltaDTO = new ItemDeltaDTO(modificationType, "assignment", assignments);
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonRequest = JSONUtils.wrapper("objectModification",
+                JSONUtils.wrapper("itemDelta", mapper.writeValueAsString(mapper.valueToTree(itemDeltaDTO))));
+        return sendJsonRequest(jsonRequest);
     }
 
     @Override
@@ -33,17 +45,22 @@ public class MidpointAssigner extends BaseMidpointCommunicator {
             return null;
         }
 
-        User user;
-        try {
-            user = new User(objectName);
-        }
-        catch(ObjectNotFoundException e) {
+        logger.info(() -> "assigner typeObject: " + typeObject);
+        String oid = OidFinder.findOid(typeObject, "name", objectName);
+        logger.info(() -> "found oid: " + oid);
+        if (oid == null) {
             return null;
         }
+        endpoint = endpoint.concat(oid);
+        openConnection();
+        connection.setRequestProperty("Content-Type", "application/json; utf-8");
+
         try {
-            return user.modifyAssignment(targetType, targetName, modificationType);
+            ValueBuilder builder = (ValueBuilder) AbstractFactory.instance().getFactory("build")
+                        .createProduct(targetType, null);
+            return updateField(builder.buildValue(targetName), modificationType);
         }
-        catch(MidpointException e) {
+        catch(ProductCreatorException e) {
             logger.warning(e.getMessage());
             return null;
         }
