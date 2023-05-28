@@ -1,6 +1,6 @@
-package ru.nsu.ccfit.kafka_midpoint.midpoint.assigners;
+package ru.nsu.ccfit.kafka_midpoint.midpoint;
 
-import ru.nsu.ccfit.kafka_midpoint.midpoint.ModificationType;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.builders.ValueBuilder;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.CategoryNotFoundException;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.MidpointException;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
@@ -10,11 +10,11 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.modifiers.UserModifier;
 
 import java.io.IOException;
 
-public class UserAssigner {
+public class User {
 
     private UserModifier modifier;
 
-    public UserAssigner(String nameUser) throws ObjectNotFoundException, IOException {
+    public User(String nameUser) throws ObjectNotFoundException, IOException {
         modifier = new UserModifier(nameUser);
 
     }

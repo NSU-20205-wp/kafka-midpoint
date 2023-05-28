@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.kafka_midpoint.midpoint.assigners;
+package ru.nsu.ccfit.kafka_midpoint.midpoint.builders;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
