@@ -42,6 +42,14 @@ public class MidpointAssigner extends BaseMidpointCommunicator {
         String targetType = (String) params.get("targetType");
         String targetName = (String) params.get("targetName");
         String modType = (String) params.get("modType");
+        ModificationType modificationType;
+        try {
+            modificationType = ModificationType.valueOf(modType.toUpperCase());
+        }
+        catch(IllegalArgumentException e) {
+            logger.warning(() -> String.format("option '%s' not found", modType));
+            return null;
+        }
 
         User user;
         openConnection();
@@ -53,11 +61,10 @@ public class MidpointAssigner extends BaseMidpointCommunicator {
             return null;
         }
         try {
-            return user.modifyAssignment(targetType, targetName, ModificationType.ADD);
+            return user.modifyAssignment(targetType, targetName, modificationType);
         }
         catch(Exception e) {
             logger.warning(e.getMessage());
-            e.printStackTrace();
             return null;
         }
     }
