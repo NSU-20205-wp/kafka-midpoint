@@ -1,12 +1,13 @@
 package ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
 public class OneTimeProductCreator implements ProductCreator {
     private static final Logger logger = Logger.getLogger(OneTimeProductCreator.class.getCanonicalName());
-    private Map<String, Object> products;
+    private final Map<String, Object> products = new HashMap<>();
 
 
     @Override
