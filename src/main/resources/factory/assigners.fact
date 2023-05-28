@@ -1,0 +1,3 @@
+ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.SimpleProductCreator
+ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointAssigner
+user ru.nsu.ccfit.kafka_midpoint.midpoint.assigners.UserAssigner
