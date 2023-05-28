@@ -2,6 +2,8 @@ package ru.nsu.ccfit.kafka_midpoint.midpoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.AssignmentRequestDTO;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.MidpointException;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.ProductCreatorException;
 
 import java.io.IOException;
@@ -35,27 +37,28 @@ public class MidpointAssigner extends BaseMidpointCommunicator {
         return sendJsonRequest(jsonRequest);
     }
     @Override
-    public final Object doOperation(Map<String, Object> params) throws IOException, ProductCreatorException {
-        String subjectName = (String) params.get("name");
+    public final Object doOperation(Map<String, Object> params) throws IOException {
+        String objectName = (String) params.get("name");
         String targetType = (String) params.get("targetType");
         String targetName = (String) params.get("targetName");
         String modType = (String) params.get("modType");
 
-        logger.info(() -> "assignment typeObject: " + typeObject);
-        String objectOid = OidFinder.findOid(typeObject, "name", subjectName);
-        logger.info(() -> "found oid: " + objectOid);
-        if (objectOid == null) {
-            return null;
-        }
-        logger.info(() -> "assignment targetObject: " + typeObject);
-        String targetOid = OidFinder.findOid(targetType, "name", targetName);
-        logger.info(() -> "found oid: " + targetOid);
-        if (targetOid == null) {
-            return null;
-        }
-        endpoint = endpoint.concat(objectOid);
+        User user;
         openConnection();
-        connection.setRequestProperty("Content-Type", "application/json; utf-8");
-        return assign(modType.toUpperCase(), targetType, targetOid);
+
+        try {
+            user = new User(objectName);
+        }
+        catch(ObjectNotFoundException e) {
+            return null;
+        }
+        try {
+            return user.modifyAssignment(targetType, targetName, ModificationType.ADD);
+        }
+        catch(Exception e) {
+            logger.warning(e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
 }
