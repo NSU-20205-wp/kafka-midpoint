@@ -54,5 +54,14 @@ public class UserAssigner {
         return modifier.updateField("assignment", buildValueForResource(resourceName), ModificationType.DELETE);
     }
 
+    public int assign(String what, String name) throws ObjectNotFoundException, IOException {
+
+        return modifier.updateField("assignment");
+    }
+
+    public int revoke(String what, String name) throws ObjectNotFoundException, IOException {
+        return 0;
+    }
+
 
 }
