@@ -7,7 +7,7 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.TargetRefDTO;
 
 import java.io.IOException;
 
-public class RoleAssigner implements Assignable {
+public class RoleBuilder implements ValueBuilder {
     @Override
     public ObjectNode buildValue(String name) throws IOException {
         TargetRefDTO targetRefDTO = new TargetRefDTO(OidFinder.findOid("role", "name", name), "RoleType");

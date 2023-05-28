@@ -6,7 +6,7 @@ import ru.nsu.ccfit.kafka_midpoint.midpoint.OidFinder;
 
 import java.io.IOException;
 
-public class ResourceAssigner implements Assignable {
+public class ResourceBuilder implements ValueBuilder {
     @Override
     public ObjectNode buildValue(String name) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();

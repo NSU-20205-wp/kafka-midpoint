@@ -4,6 +4,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.IOException;
 
-public interface Assignable {
+public interface ValueBuilder {
     ObjectNode buildValue(String name) throws IOException;
 }
