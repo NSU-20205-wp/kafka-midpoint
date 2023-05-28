@@ -5,7 +5,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.ModificationType;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.OidFinder;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.TargetRefDTO;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.CategoryNotFoundException;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.MidpointException;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.AbstractFactory;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.factory.creator.ProductCreatorException;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.modifiers.UserModifier;
 
 import java.io.IOException;
@@ -54,13 +58,28 @@ public class UserAssigner {
         return modifier.updateField("assignment", buildValueForResource(resourceName), ModificationType.DELETE);
     }
 
-    public int assign(String what, String name) throws ObjectNotFoundException, IOException {
-
-        return modifier.updateField("assignment");
+    public int assign(String what, String name) throws MidpointException, IOException {
+        ValueBuilder builder;
+        try {
+            builder = (ValueBuilder) AbstractFactory.instance().getFactory("build")
+                    .createProduct(what, null);
+        }
+        catch(ProductCreatorException e) {
+            throw new CategoryNotFoundException(e);
+        }
+        return modifier.updateField("assignment", builder.buildValue(name), ModificationType.ADD);
     }
 
-    public int revoke(String what, String name) throws ObjectNotFoundException, IOException {
-        return 0;
+    public int revoke(String what, String name) throws MidpointException, IOException {
+        ValueBuilder builder;
+        try {
+            builder = (ValueBuilder) AbstractFactory.instance().getFactory("build")
+                    .createProduct(what, null);
+        }
+        catch(ProductCreatorException e) {
+            throw new CategoryNotFoundException(e);
+        }
+        return modifier.updateField("assignment", builder.buildValue(name), ModificationType.DELETE);
     }
 
 
