@@ -56,7 +56,7 @@ public class MidpointAssigner extends BaseMidpointCommunicator {
         connection.setRequestProperty("Content-Type", "application/json; utf-8");
 
         try {
-            Assignment builder = (Assignment) AbstractFactory.instance().getFactory("build")
+            Assignment builder = (Assignment) AbstractFactory.instance().getFactory("build_assignment")
                         .createProduct(targetType, null);
             return updateField(builder.buildValue(targetName), modificationType);
         }
