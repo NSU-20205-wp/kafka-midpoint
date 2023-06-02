@@ -66,4 +66,21 @@ For <b>kafka-magic</b>: if you want to use such format, you <b>should</b> select
     }
 
 "what" can be user, role or resource
- 
+
+## Assign
+
+    {
+        "Message": {
+            "requestId": 20,
+            "operation": "assign",
+            "what": "user",
+            "params": {
+                "name": "user_test",
+                "targetType": "role",
+                "targetName": "role_test",
+                "modType": "add"
+            }
+        }
+    }
+
+Currently, "what" can be 'user' only. "targetType" can be 'role' or 'resource'. "modType" can be 'add' or 'delete'.
