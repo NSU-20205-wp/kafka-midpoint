@@ -1,58 +1,26 @@
 package ru.nsu.ccfit.kafka_midpoint.midpoint.assigners;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.ModificationType;
+import ru.nsu.ccfit.kafka_midpoint.midpoint.MidpointAssigner;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.OidFinder;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.dtos.TargetRefDTO;
 import ru.nsu.ccfit.kafka_midpoint.midpoint.exceptions.ObjectNotFoundException;
-import ru.nsu.ccfit.kafka_midpoint.midpoint.modifiers.UserModifier;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
-public class UserAssigner {
-
-    private UserModifier modifier;
-
-    public UserAssigner(String nameUser) throws ObjectNotFoundException, IOException {
-        modifier = new UserModifier(nameUser);
-
+public class UserAssigner extends MidpointAssigner {
+    private static final Logger logger = Logger.getLogger(UserAssigner.class.getCanonicalName());
+    public UserAssigner(String nameUser) throws IOException, ObjectNotFoundException {
+        super("user");
+        String oid = OidFinder.findOid("user", "name", nameUser);
+        if (oid == null) {
+            throw new ObjectNotFoundException("user with name: " + nameUser + " not found");
+        }
+        endpoint = endpoint.concat(oid);
+        openConnection();
+        connection.setRequestProperty("Content-Type", "application/json; utf-8");
     }
 
-    private ObjectNode buildValueForRole(String roleName) throws ObjectNotFoundException, IOException {
-        TargetRefDTO targetRefDTO = new TargetRefDTO(OidFinder.findRoleOid("name", roleName), "RoleType");
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode targetRef = mapper.createObjectNode();
-        targetRef.set("targetRef", mapper.valueToTree(targetRefDTO));
-        return targetRef;
+    public UserAssigner() {
+        super("user");
     }
-
-    public int assignRole(String roleName) throws ObjectNotFoundException, IOException {
-        return modifier.updateField("assignment", buildValueForRole(roleName), ModificationType.ADD);
-    }
-
-    public int revokeRole(String roleName) throws ObjectNotFoundException, IOException {
-        return modifier.updateField("assignment", buildValueForRole(roleName), ModificationType.DELETE);
-    }
-
-    private ObjectNode buildValueForResource(String resourceName) throws ObjectNotFoundException, IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectNode root = objectMapper.createObjectNode();
-        ObjectNode constructionNode = objectMapper.createObjectNode();
-        ObjectNode resourceRefNode = objectMapper.createObjectNode();
-        resourceRefNode.put("oid", OidFinder.findResourceOid("name", resourceName));
-        constructionNode.set("resourceRef", resourceRefNode);
-        root.set("construction", constructionNode);
-        return root;
-    }
-
-    public int assignResource(String resourceName) throws ObjectNotFoundException, IOException {
-        return modifier.updateField("assignment", buildValueForResource(resourceName), ModificationType.ADD);
-    }
-
-    public int revokeResource(String resourceName) throws ObjectNotFoundException, IOException {
-        return modifier.updateField("assignment", buildValueForResource(resourceName), ModificationType.DELETE);
-    }
-
-
 }
