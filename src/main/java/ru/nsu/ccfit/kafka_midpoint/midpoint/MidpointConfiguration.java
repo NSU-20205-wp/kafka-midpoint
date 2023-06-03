@@ -14,10 +14,25 @@ public class MidpointConfiguration {
         Properties properties = new Properties();
         try (InputStream inp = new FileInputStream("src/main/resources/application.properties")) {
             properties.load(inp);
-            midpointHost = properties.getProperty("midpoint.host", "localhost");
-            midpointPort = Integer.valueOf(properties.getProperty("midpoint.port"));
-        } catch (IOException e) {
+            String preHost = properties.getProperty("midpoint.host", null);
+            midpointHost = extract(preHost);
+            String prePort = properties.getProperty("midpoint.port", null);
+            midpointPort = Integer.valueOf(extract(prePort));
+        }
+        catch(IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private String extract(String raw) {
+        raw = raw.replaceAll("[{}$\\s]", "");
+        String[] vars = raw.split(":");
+        String def = System.getenv(vars[0]);
+        if(def == null) {
+            return vars[1];
+        }
+        else {
+            return def;
         }
     }
 
